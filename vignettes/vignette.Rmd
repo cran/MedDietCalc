@@ -1,0 +1,548 @@
+---
+title: "MedDietCalc"
+author: "Miguel Menéndez^[Scientific Support Unit, Hospital 12 de Octubre, Madrid, Spain]"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{"MedDietCalc"}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+  
+
+---
+
+```{r setup}
+knitr::opts_chunk$set(encoding = "UTF-8")
+```
+
+
+
+# Objective and vignette plan
+This vignette shows the use of MedDietCalc package both at individual and epidemiological level.
+
+1. Check individual level adherence to Mediterranean Diet (MedDiet)
+2. Supose a nutriepidemiological study where scores are involved
+    + compute cardiovascular risk, as dependent variable
+    + compute MedDiet adherence, as study variable
+    + measure agreement between MedDiet adherence scores
+
+    
+***
+
+# 1. Use at individual Level
+Supose two people whose weekly food intake is the following. We have stored it as servings:
+```{r}
+MaleA <- data.frame(Bread = 14, WholeBread = 14, Potatoes = 3, Pasta = 5, 
+                    Fruits = 14, Legumes = 3, Nuts = 5, Vegetables = 21, 
+                    Oil = "Olive Oil", OliveOil = 25, Dairy = 14, 
+                    WholeDairy = 7, Fish = 2, Poultry = 2, Eggs = 4, Meat = 3, Wine = 7)
+
+MaleB <- data.frame(Bread = 6, WholeBread = 0, Potatoes = 6, Pasta = 4, 
+                    Fruits = 5, Legumes = 1, Nuts = 1, Vegetables = 10, 
+                    Oil = "Olive and Seeds Oil", OliveOil = 14, Dairy = 28, 
+                    WholeDairy = 28, Fish = 4, Poultry = 4, Eggs = 8, Meat = 5, Wine = 0)
+
+library(knitr)
+kable(t(rbind(MaleA = MaleA, MaleB = MaleB)))
+```
+
+A first look at this table shows that MaleA is reasonably adherent to MedDiet: he uses olive oil as dietary fat, eats legumes 3 times a week, has a high intake of fruits and vegetables, also a hich intake of bread and pasta, eats nuts regularly, and his meat intake is not prominent. Last, he has a moderate wine consumption.
+
+
+Male B is clearly less adherent to MedDiet tenets: olive oil and seeds oil are used, legumes and nuts intake is scarce, also bread and pasta are eate but not daily, fruits and vegetables intake is not high, has a high intake of dairy, and meat and eggs are more prominent than fish and pultry. Last, he doesn't drink wine regularly.
+
+
+We want to somehow measure this adherence, computing two MedDiet scores for them. For this example we are using the score according to Pitsavos et al^[Pitsavos, Christos, Demosthenes B. Panagiotakos, Natalia Tzima, Christina Chrysohoou, Manolis Economou, Antonis Zampelas, and Christodoulos Stefanadis. 2005. "Adherence to the Mediterranean Diet Is Associated with Total Antioxidant Capacity in Healthy Adults: The ATTICA Study". The American Journal of Clinical Nutrition 82 (3): 694-99. http://ajcn.nutrition.org/content/82/3/694] 
+and the literature based one according to Sofi et al^[Sofi, Francesco, Claudio Macchi, Rosanna Abbate, Gian Franco Gensini, and Alessandro Casini. 2014. 'Mediterranean Diet and Health Status: An Updated Meta-Analysis and a Proposal for a Literature-Based Adherence Score'. Public Health Nutrition 17 (12): 2769-82. https://www.cambridge.org/core/journals/public-health-nutrition/article/mediterranean-diet-and-health-status-an-updated-meta-analysis-and-a-proposal-for-a-literature-based-adherence-score/FCD121A09BB103DFB55237479D5CB659]:
+
+First we trasnsform variable Oil, which informs about the procedence of dietary oil (seeds oil, olive oil, or both seeds and olive oil) to be usable by formula
+```{r}
+levels(MaleA$Oil)[levels(MaleA$Oil) == "Olive Oil"] <- 2
+levels(MaleB$Oil)[levels(MaleB$Oil) == "Olive and Seeds Oil"] <- 1
+```
+
+
+
+* Compute 2 MedDiet scores for MaleA
+```{r}
+library(MedDietCalc)
+
+MaleA1 <- computePitsavos(data = MaleA, WholeCereals = WholeBread, Fruit = Fruits, 
+                          Vegetables = Vegetables, Potatoes = Potatoes, Legumes = Legumes,
+                          OliveOil = OliveOil, OOmeasure = "serving", Fish = Fish, 
+                          Meat = Meat, Poultry = Poultry, WholeDairy = WholeDairy, 
+                          Wine = Wine, output = "percent", frequency = "weekly")
+
+MaleA2 <- computeSofi(data = MaleA, Fruit = Fruits, Vegetables = Vegetables, 
+                      Legumes = Legumes, Cereals = Bread + Pasta, Fish = Fish, 
+                      Meat = Meat, Dairy = Dairy, Alcohol = Wine, OliveOil = Oil, 
+                      output = "percent", frequency = "weekly")
+```
+
+* Compute 2 MedDiet scores for MaleB
+```{r}
+MaleB1 <- computePitsavos(data = MaleB, WholeCereals = WholeBread, Fruit = Fruits, 
+                          Vegetables = Vegetables, Potatoes = Potatoes, Legumes = Legumes,
+                          OliveOil = OliveOil, OOmeasure = "serving", Fish = Fish, 
+                          Meat = Meat, Poultry = Poultry, WholeDairy = WholeDairy, 
+                          Wine = Wine, output = "percent", frequency = "weekly")
+
+MaleB2 <- computeSofi(data = MaleB, Fruit = Fruits, Vegetables = Vegetables, 
+                      Legumes = Legumes, Cereals = Bread + Pasta, Fish = Fish, 
+                      Meat = Meat, Dairy = Dairy, Alcohol = Wine, OliveOil = Oil, 
+                      output = "percent", frequency = "weekly")
+```
+
+```{r}
+kable(data.frame(MaleA = c(MaleA1, MaleA2), MaleB = c(MaleB1, MaleB2), 
+                 row.names = c("score1", "score2")))
+```
+
+
+We can notice that both scores agree considering MaleA more adherent to MedDiet than MaleB.
+
+Both scores more or less agree in the score of MaleB (50% vs 56%), but differences in measuring MaleA diet are higher (69% vs 83%).
+
+If we advise MaleB to change his diet, becoming more adherent to MedDiet, we could use this scores to measure changes.
+
+***
+
+
+
+
+# 2. Use at epidemiological level
+
+## Hypothetical nutriepidemiological study
+Let's imagine we are conducting a study in which we want to test the hypothesis:
+
+> *MedDiet is associated with lower cardiovascular risk.*
+
+
+To test it, we have collected data from four Spanish regions.
+
+As dependent variable we plan to use the 10-year cardiovascular risk, computed with a risk score developed in Spanish population^[Marrugat J, Subirana I, Ramos R, Vila J, Marín-Ibañez A, Guembe MJ, et al. Derivation and validation of a set of 10-year cardiovascular risk predictive functions in Spain: the FRESCO Study. Prev Med. 2014 Apr;61:66–74. 
+].
+As study variable we want to use MedDiet adherence, measured with a score, but **which score to use?** 
+
+This package provides functions to compute the following MedDiet adherence scores:
+
+- Cardioprotective Mediterranean Diet Index, from Martínez-González et al.^[Martinez-Gonzalez, M. A., E. Fernandez-Jarne, M. Serrano-Martinez, M. Wright, and E. Gomez-Gracia. 2004. 'Development of a Short Dietary Intake Questionnaire for the Quantitative Estimation of Adherence to a Cardioprotective Mediterranean Diet'. European Journal of Clinical Nutrition 58 (11): 1550-52. http://www.nature.com/ejcn/journal/v58/n11/full/1602004a.html]
+in function computeCardio()
+- Score according to Goulet et al. in 2003^[Goulet, Julie, Benoıt Lamarche, Genevieve Nadeau, and Simone Lemieux. 2003. 'Effect of a Nutritional Intervention Promoting the Mediterranean Food Pattern on Plasma Lipids, Lipoproteins and Body Weight in Healthy French-Canadian Women'. Atherosclerosis 170 (1): 115-24. http://europepmc.org/abstract/med/12957689]
+in function computeGoulet
+- MAI (Mediterranean Adequacy Index) according to Alberti-Fidanza et al., 1999^[Alberti-Fidanza, A., F. Fidanza, M. P. Chiuchiù, G. Verducci, and D. Fruttini. 1999. "Dietary Studies on Two Rural Italian Population Groups of the Seven Countries Study. 3. Trend Of Food and Nutrient Intake from 1960 to 1991." European Journal of Clinical Nutrition 53 (11): 854–60] 
+in function computeMAI99()
+- MDP (Mediterranean Dietary Pattern), 2002^[Martinez-Gonzalez, Miguel A., Elena Fernandez-Jarne, Manuel Serrano-Martinez, Amelia Marti, J. Alfredo Martinez, and Jose M. Martin-Moreno. 2002. 'Mediterranean Diet and Reduction in the Risk of a First Acute Myocardial Infarction: An Operational Healthy Dietary Score'. European Journal of Nutrition 41 (4): 153-60. http://link.springer.com/article/10.1007/s00394-002-0370-6]
+in function computeMDP02
+- MDQI (Mediterranean Diet Quality Index)^[Scali, Jacqueline, Aurelia Richard, and Mariette Gerber. 2001. 'Diet Profiles in a Population Sample from Mediterranean Southern France'. Public Health Nutrition 4 (02): 173-182. https://www.cambridge.org/core/journals/public-health-nutrition/article/diet-profiles-in-a-population-sample-from-mediterranean-southern-france/C224E7CA8F130EF5B2385A8143705AB0]
+in function computeMDQI()
+- MDS 1995, fist Mediterranean Adherence score index, developed by Trichopoulou et al.^[Trichopoulou, A., A. Kouris-Blazos, M. L. Wahlqvist, C. Gnardellis, P. Lagiou, E. Polychronopoulos, T. Vassilakou, L. Lipworth, and D. Trichopoulos. 1995. "Diet and Overall Survival in Elderly People." BMJ (Clinical Research Ed.) 311 (7018): 1457–60]
+in function computeMDS95()
+- MDS as modified in 2003^[Trichopoulou, Antonia, Tina Costacou, Christina Bamia, and Dimitrios Trichopoulos. 2003. "Adherence to a Mediterranean Diet and Survival in a Greek Population." New England Journal of Medicine 348 (26): 2599–2608. http://www.nejm.org/doi/full/10.1056/NEJMoa025039]
+in function computeMDS03()
+- MDS as modified in 2005^[Trichopoulou, Antonia, Philippos Orfanos, Teresa Norat, Bas Bueno-de-Mesquita, Marga C. Ocke, Petra HM Peeters, Yvonne T. van der Schouw, et al. 2005. "Modified Mediterranean Diet and Survival: EPIC-Elderly Prospective Cohort Study." BMJ 330 (7498): 991. http://www.bmj.com/content/early/2004/12/31/bmj.38415.644155.8F]
+in function computeMDS05()
+- MDS as modified in 2012^[Sofi, Francesco, Rosanna Abbate, Gian Franco Gensini, Alessandro Casini, Antonia Trichopoulou, and Christina Bamia. 2012. ‘Identification of Change-Points in the Relationship between Food Groups in the Mediterranean Diet and Overall Mortality: An “a Posteriori” Approach’. European Journal of Nutrition 51 (2): 167–72. http://link.springer.com/article/10.1007%2Fs00394-011-0202-7]
+in function computeMDS12()
+- MSDPS (Mediterranean-Style Dietary Pattern Score)^[Rumawas, Marcella E., Johanna T. Dwyer, Nicola M. Mckeown, James B. Meigs, Gail Rogers, and Paul F. Jacques. 2009. 'The Development of the Mediterranean-Style Dietary Pattern Score and Its Application to the American Diet in the Framingham Offspring Cohort'. The Journal of Nutrition 139 (6): 1150-56. http://jn.nutrition.org/content/139/6/1150.long]
+in function computeMSDPS()
+- Score according to Pitsavos et al. in 2005^[Pitsavos, Christos, Demosthenes B. Panagiotakos, Natalia Tzima, Christina Chrysohoou, Manolis Economou, Antonis Zampelas, and Christodoulos Stefanadis. 2005. "Adherence to the Mediterranean Diet Is Associated with Total Antioxidant Capacity in Healthy Adults: The ATTICA Study". The American Journal of Clinical Nutrition 82 (3): 694-99. http://ajcn.nutrition.org/content/82/3/694]
+in function computePitsavos().
+This score can also be found in the literature as Dietary Score^[Mila-Villarroel, Raimon, Anna Bach-Faig, Josep Puig, Anna Puchal, Andreu Farran, Lluis Serra-Majem, and Josep Lluis Carrasco. 2011. "Comparison and Evaluation of the Reliability of Indexes of Adherence to the Mediterranean Diet." Public Health Nutrition 14 (12A): 2338-45. https://www.cambridge.org/core/services/aop-cambridge-core/content/view/S1368980011002606] ^[D'Alessandro, Annunziata, and Giovanni De Pergola. 2015. "Mediterranean Diet and Cardiovascular Disease: A Critical Evaluation of A Priori Dietary Indexes." Nutrients 7 (9): 7863-88. http://www.mdpi.com/2072-6643/7/9/5367],
+it can also be found in Waijers et al.^[Waijers, Patricia M. C. M., Edith J. M. Feskens, and Marga C. Ocke. 2007. "A Critical Review of Predefined Diet Quality Scores." British Journal of Nutrition 97 (2): 219-231. https://www.cambridge.org/core/services/aop-cambridge-core/content/view/S0007114507250421] considered as a derivate from MDS and called MDS-a IV. We have preferred to call it by the name of paper's first author.
+- Score used in PreDiMed trial (Prevención con Dieta Mediterránea, Spanish which means Prevention with Mediterranean Diet)^[Martinez-Gonzalez, Miguel Angel, Dolores Corella, Jordi Salas-Salvado, Emilio Ros, Maria Isabel Covas, Miquel Fiol, Julia Warnberg, et al. 2012. "Cohort Profile: Design and Methods of the PREDIMED Study." International Journal of Epidemiology 41 (2): 377-385. http://ije.oxfordjournals.org/content/41/2/377.short.]
+in function computePredimed()
+- RMED (Revised Mediterranean Diet adherence score)^[Buckland, Genevieve, Carlos A. Gonzalez, Antonio Agudo, Mireia Vilardell, Antoni Berenguer, Pilar Amiano, Eva Ardanaz, et al. 2009. 'Adherence to the Mediterranean Diet and Risk of Coronary Heart Disease in the Spanish EPIC Cohort Study'. American Journal of Epidemiology, January, kwp282. https://academic.oup.com/aje/article-lookup/doi/10.1093/aje/kwp282]
+in function computeRMED()
+- Score according to the literature review by Sofi et al. in 2014^[Sofi, Francesco, Claudio Macchi, Rosanna Abbate, Gian Franco Gensini, and Alessandro Casini. 2014. 'Mediterranean Diet and Health Status: An Updated Meta-Analysis and a Proposal for a Literature-Based Adherence Score'. Public Health Nutrition 17 (12): 2769-82. https://www.cambridge.org/core/journals/public-health-nutrition/article/mediterranean-diet-and-health-status-an-updated-meta-analysis-and-a-proposal-for-a-literature-based-adherence-score/FCD121A09BB103DFB55237479D5CB659]
+in function computeSofi()
+
+Some scores have more than one version, or subtle differences can be found in the Literature in different papers. When this has be found, a number finishes the function's name, to make it clear which score version has been used. For instance, the function computeMDS95() is the MDS score in its 1995 version.
+
+
+
+
+
+## Compute dependent variable
+We compute risk of fatal vascular event according to FRESCO score. 
+
+With the outcome arguement we can compute just coronary risk (outcome = "Coronary") or stroke risk (outcome = "Stroke"), or both cerebrovascular and cardiovascular risk. We are set outome = "All".
+```{r}
+data(nutriSample)
+
+risk <- computeFRESCO(data = nutriSample, 
+	outcome = "All", simplified = TRUE, 
+	Sex = SEXO, Age = EDAD, Smoker = ifelse(nutriSample$FUMADOR == 1, 1, 0),
+	BMI = nutriSample$peso/(nutriSample$altura)^2,
+	men = "Hombre", women = "Mujer")
+	
+hist(risk, main = "10-year estimated \n cardiovascular risk")
+```
+
+We can see that high risk is infrequent in our sample. Which could be expected in our Spanish low risk population.
+
+## Which MedDiet adherence score to use?
+As there are a lot of them, and it has been suggested that they had sometimes low correlation^[Milà-Villarroel R, Bach-Faig A, Puig J, Puchal A, Farran A, Serra-Majem L, et al. Comparison and evaluation of the reliability of indexes of adherence to the Mediterranean diet. Public Health Nutr. 2011 Dec;14(12A):2338–45. 
+], we are going to test the scores in our sample.
+
+The first MedDiet score I am going to use is the 2005 version of MDS, an update of the landmark first mediterranean diet adherence score developed by Antonia Trichopoulou and coleagues. 
+
+With this questionnaire we will look at the 'output' argument, with it we can ask the formula to provide the ouput in one of three ways:
+
++ a numeric index of adherence, which is the usual in the literature
++ this adherence as percentage, according to the maximum score possible to reach. This way is more intuitive to quickly read the output (for instance, the above example of MaleA and MaleB, we didn't need to know the scale of this scores, and with a percentage we have quickly compared them)
++ as a data frame, which additionaly informs us of the individual points reached in each score item. Thus, it provides a bit more insight about the performing of the score in our sample.
+
+This step (to set output argument to 'data.frame') should be performed with each score, as it can show inconsistencies, or too high or too low scores in specific score items, but to make the vignette brief, we will show it just with this frist score.
+
+### MDS
+I set output as 'data.frame', to check wether inconsistencies are apparent
+```{r}
+MDS05 <- computeMDS05(data = nutriSample,
+        Vegetables = P41grCom + P42grCom,
+        Legumes =  P46grCom,
+        FruitAndNuts =  P50grCom + P52grCom + P53grCom,
+        Cereals = P55grCom + P56grCom + P57grCom + P59grCom + 
+          P60grCom + P61grCom + P62grCom,
+        Fish = P35grCom + P36grCom + P37grCom + P38grCom,
+        Meat = P29grCom + P30grCom + P31grCom + P32grCom,
+        Dairy = P19grCom + P20grCom + P20grCom + P22grCom + P23grCom + 
+          P24grCom + P25grCom + P26grCom + P27grCom,
+        Alcohol =  12 * (P94rac + P96rac + P97rac + P98rac + P99rac),
+        Potatoes =  NULL, 
+        MUFA =  totalGrasaMonoins,
+        PUFA =  totalGrasaPoliins,
+        SFA =  totalGrasaSat,
+        Sex =  SEXO, men = "Hombre", women = "Mujer", frequency = "daily", 
+        output = "data.frame", rm.na = FALSE)
+
+```
+
+We get a warning informing us than potatoes have not been computed, and we agree. When MDS questionnaire was developed in 1990s, potatoes were think to have a relevant role in health outcomes, and were computed with cereals, but later research has challenged this view. This formula allows the user to compute potatoes with cereals, although probably at present no researcher will want to combine them. 
+
+```{r}
+kable(head(MDS05))
+```
+
+```{r}
+kable(round(apply(MDS05, 2, mean),2))
+```
+
+In this table, each row is a person, the columns are the individual items that conform this score: '**V**score' is the points people have obtained in '**V**egetables' item, '**L**score' in **L**egumes, '**Fr**score' in **Fr**uits, and so on. For further details, references of each score development should be consulted.
+
+Last columns are:
+
++ 'absolute', the total score each person has got, and the output when ouput = 'score'. Usually absolute socre is the sum of each individual items, but scoring schema could vary among questionnaires. To understand the meaning of this 'absolute' number -for instance, 3 for the first person-, you need to know that maximun possible is 9. Studies developing or using MedDiet scores tend to use absolute adherence scores.
+
++ 'percent', which is the same score but as a percentage. For the first person, who had 3 points out of 10 possible points, it is 33.3%.
+
+Now we can look for variables with too many missing data, or with too high or too low scores. For instance, if legumes consumption receives full score too often it's reasonable to check data for units mistakes, or wether if the sample has special patterns of feeding.
+
+Now that we have checked it for unexpected behaviour, we keep just the percent of adherence, which is more intuitive.
+
+```{r}
+MDS05 <- MDS05$percent
+```
+
+
+
+
+I compute others, each of them with their particularities
+
+### MDS 2012 update
+```{r}
+MDS12 <- 
+  computeMDS12(data = nutriSample,
+               Vegetables = P41grCom + P42grCom,
+               Legumes =  P46grCom,
+               FruitAndNuts =  P50grCom + P52grCom + P53grCom,
+               Cereals = P55grCom + P56grCom + P57grCom + P59grCom + 
+                 P60grCom + P61grCom + P62grCom,
+               Fish = P35grCom + P36grCom + P37grCom + P38grCom,
+               Meat = P29grCom + P30grCom + P31grCom + P32grCom,
+               Dairy = P19grCom + P20grCom + P20grCom + P22grCom + P23grCom + 
+                 P24grCom + P25grCom + P26grCom + P27grCom,
+               Alcohol =  12 * (P94rac + P96rac + P97rac + P98rac + P99rac),
+               Potatoes =  NULL,
+               OOprincipal = ifelse(nutriSample$AceiteTipo == 1, 1, 0),
+               Sex =  SEXO, men = "Hombre", women = "Mujer", 
+               frequency = "daily", output = "percent", rm.na = FALSE)
+```
+We get the same warning about potatoes. 
+
+### Pitsavos
+
+
+```{r}
+Pitsavos <- computePitsavos(data = nutriSample,
+  WholeCereals = P56rac + ifelse(nutriSample$P63_2 == 2, nutriSample$P61rac, 0),
+  Fruit = P50rac + P52rac,
+  Vegetables = P41rac + P42rac,
+  Potatoes = P43rac + P44rac + P45rac,
+  Legumes = P46rac,
+  OliveOil = Aceitegr,
+  OOmeasure = "gr",
+  Fish = P35rac + P36rac + P37rac + P38rac,
+  Meat = P29rac + P30rac + P31rac + P32rac,
+  Poultry = P33rac,
+  WholeDairy = P19grCom + P22grCom,
+  Wine = P96rac,
+  output = "percent", frequency = "daily", rm.na = FALSE)
+
+``` 
+
+### Predimed
+```{r}
+Predimed <- computePredimed(data = nutriSample, OliveOil = Aceitegr, OOmeasure = "gr",
+                  OOprincipal = ifelse(nutriSample$AceiteTipo == 1, 1, 0),
+                  Vegetables = P41rac + P42rac,
+                  Fruit = P50rac + P52rac,
+                  RedMeat = P29rac + P31rac,
+                  Butter = P79rac,
+                  SoftDrinks = P89rac + P90rac,
+                  Wine = P96rac,
+                  Legumes = P46rac,
+                  Fish = P35rac + P36rac + P37rac + P38rac,
+                  Pastries = P69rac + P70rac + P71rac + P72rac + P73rac,
+                  Nuts = P53rac,
+                  WhiteMeat = ifelse(nutriSample$P30rac > nutriSample$P29rac, 1, 0),
+                  Sofritos = rep(0, nrow(data)), # data lacks this variable, 
+                                                 # so we go on without it
+                  output = "percent", rm.na = FALSE, frequency = "daily")
+
+``` 
+
+Our data lacks one item of this score, which is 'sofrito' consumption. Sofritos are a slow cooked sauce, usually with onion and garlic or other vegetables ^[https://en.wikipedia.org/wiki/Sofrito].
+
+Predimed score gives more weight to olive oil consumption than to other foods, as olive oil is scored more than once: it is asked if olive oil is principal (yes or no), the amount of olive oil consumed, and sofrito consumption, which is very rich in olive oil.
+
+
+### MAI
+```{r}
+MAI <- computeMAI99(data = nutriSample,
+  Bread = P55Kcal + P56Kcal + P57Kcal,
+  Cereals = P55Kcal + P56Kcal + P57Kcal + P59Kcal + P60Kcal + P61Kcal + P62Kcal,
+  Legumes = P46Kcal,
+  Potatoes = P43Kcal + P44Kcal + P46Kcal,
+  Vegetables = P41Kcal + P42Kcal,
+  FruitAndNuts = P50Kcal + P53Kcal + P53Kcal,
+  Fish = P35Kcal + P36Kcal + P37Kcal + P38Kcal,
+  Wine = P96Kcal,
+  Oil = AceiteKcal,
+  Milk = P19Kcal + P20Kcal + P21Kcal,
+  Cheese = P26Kcal + P27Kcal,
+  Meat = P29Kcal + P30Kcal + P31Kcal + P32Kcal,
+  Eggs = P28Kcal,
+  AnimalFats = P29grGrasa + P30grGrasa + P31grGrasa + 
+    P32grGrasa + P33grGrasa + P34grGrasa ,
+  SoftDrinks = P89Kcal + P90Kcal,
+  Pastries = P69Kcal + P70Kcal + P71Kcal + P72Kcal + P73Kcal,
+  Sugar = P84Kcal,
+  Kcal = totalKcal,
+  output = "index", rm.na = FALSE)
+
+``` 
+
+This score is different, as it has not the same schema, and we have not coerced it as percentage.
+
+### MDQI
+```{r}
+MDQI <- computeMDQI(data = nutriSample,
+                      FruitAndVegetables = P50grCom + P52grCom + P41grCom + P42grCom,
+                      OliveOil = Aceitegr,
+                      OOmeasure = "gr",
+                      Fish = P35grCom + P36grCom + P37grCom + P38grCom,
+                      Cereals = P55grCom + P56grCom + P57grCom + P59grCom + 
+                        P60grCom + P61grCom + P62grCom,
+                      Meat = P29grCom + P30grCom + P31grCom + P32grCom,
+                      SatFats = totalGrasaSat,
+                      Cholesterol = totalCol,
+                      Kcal = totalKcal,
+                      invert = TRUE,
+                      frequency = "daily", output = "percent", rm.na = FALSE)
+``` 
+
+### Cardio
+```{r}
+Cardio <- computeCardio(data = nutriSample,
+                          OliveOil = Aceitegr,
+                          OOmeasure = "gr",
+                          Fruit = P50rac + P52rac,
+                          Vegetables = P41rac + P42rac,
+                          Legumes = P46rac,
+                          Fish = P35rac + P36rac + P37rac + P38rac,
+                          Wine = P96rac,
+                          Meat = P29rac + P30rac + P31rac + P32rac,
+                          RefinedBread = P55rac,
+                          RefinedRice = P61rac,
+                          WholeBread = P56rac,
+                          frequency = "daily", output = "percent", rm.na = FALSE)
+``` 
+
+### MDP02
+```{r}
+MDP02 <- computeMDP02(data = nutriSample,
+                        OliveOil = Aceitegr,
+                        OOmeasure = "gr",
+                        Fiber = totalFibra,
+                        Fruit = P50grCom,
+                        Vegetables = P41grCom + P42grCom,
+                        Fish = P35grCom + P36grCom + P37grCom + P38grCom,
+                        Alcohol = 12 * (P94rac + P96rac + P97rac + P98rac + P99rac),
+                        Meat = P29grCom + P30grCom + P31grCom + P32grCom,
+                        RefinedCereals = P55grCom + P61grCom,
+                        output = "percent", rm.na = FALSE, frequency = "daily")
+``` 
+
+### RMed
+```{r}
+RMed <- computeRMED(data = nutriSample,
+                      Kcal = totalKcal,
+                      FruitAndNuts = P50grCom + P52grCom,
+                      Vegetables = P41grCom + P42grCom,
+                      Legumes = P46grCom,
+                      Cereals = P55grCom + P56grCom + P57grCom + P59grCom + 
+                        P60grCom + P61grCom + P62grCom,
+                      Fish = P35grCom + P36grCom + P37grCom + P38grCom,
+                      OliveOil = Aceitegr,
+                      Meat = P29grCom + P30grCom + P31grCom + P32grCom,
+                      Dairy= P19grCom + P20grCom + P20grCom + P22grCom + P23grCom + 
+                        P24grCom + P25grCom + P26grCom + P27grCom,
+                      Alcohol = 12 * (P94rac + P96rac + P97rac + P98rac + P99rac),
+                      Sex = SEXO, men = "Hombre", women = "Mujer",
+                      frequency = "daily", output = "percent", rm.na = FALSE)
+``` 
+
+### Sofi
+```{r}
+# kind of Olive Oil consumded is stored in a different way than asked by formula:
+  # data has: 1 = olive oil, 2 = seeds oil, 3 = both, 
+  # formula wants use of olive oil: 0 = occasional use, 1 = frequent use, 2 = regular use
+  # so we first change it:
+Oil <- ifelse(nutriSample$AceiteTipo == 2, 0, 
+              ifelse(nutriSample$AceiteTipo == 3, 1, 
+                     ifelse(nutriSample$AceiteTipo == 1, 2, 0)))
+
+Sofi <- computeSofi(data = nutriSample,
+              Fruit = P50rac + P52rac,
+              Vegetables = P41rac +  P42rac,
+              Legumes = P46rac,
+              Cereals = P55rac + P56rac + P57rac + P59rac + P60rac + P61rac + P62rac,
+              Fish = P35rac + P36rac + P37rac + P38rac,
+              Meat = P29rac + P30rac + P31rac + P32rac,
+              Dairy = P19rac + P20rac + P20rac + P22rac + P23rac + 
+                P24rac + P25rac + P26rac + P27rac,
+              Alcohol = P94rac + P96rac + P97rac + P98rac + P99rac,
+              OliveOil = Oil,
+              output = "percent", rm.na = FALSE, frequency = "daily")
+rm(Oil)
+
+```
+
+### Goulet
+```{r}
+Goulet <- computeGoulet(data = nutriSample,
+  WholeCereals = P56rac + ifelse(nutriSample$P63_2 == 2, nutriSample$P61rac, 0),
+  Vegetables = P41rac + P42rac,
+  Fruit = P50rac + P52rac,
+  LegumesAndNuts = P46rac + P53rac + P75rac,
+  OliveOil = Aceitegr,
+  OOmeasure = "gr",
+  Olives = P54rac,
+  Dairy = P19rac + P20rac + P20rac + P22rac + P23rac + P24rac + P25rac + P26rac + P27rac,
+  Fish = P35rac + P36rac + P37rac + P38rac,
+  Poultry = P33rac,
+  Eggs = P28rac,
+  Sweets = P69rac + P70rac + P71rac + P72rac + P73rac,
+  Meat = P29rac + P30rac + P31rac + P32rac,
+  output = "percent", frequency = "daily", rm.na = FALSE)
+```
+
+### MSDPS
+```{r}
+# kind of Olive Oil consumded is stored in a different way than asked by formula:
+  # data has: 1 = olive oil, 2 = seeds oil, 3 = both, 
+  # formula wants: 
+    # 0 = olive oil is not usually consumed. 
+    # 1 = olive oil and other vegetable oils are usually consumed. 
+    # 2 = only olive oil is usually consumed
+  # so we first change it:
+Oil <- ifelse(nutriSample$AceiteTipo == 2, 0, 
+              ifelse(nutriSample$AceiteTipo == 3, 1, 
+                     ifelse(nutriSample$AceiteTipo == 1, 2, 0)))
+
+MSDPS <- computeMSDPS(data = nutriSample,
+        # group of arguments about food consumption:
+           WholeCereals = P56rac + ifelse(nutriSample$P63_2 == 2, nutriSample$P61rac, 0),
+           Fruit = P50rac + P52rac,
+           Vegetables = P41rac + P42rac,
+           Dairy = P19rac + P20rac + P20rac + P22rac + P23rac + 
+             P24rac + P25rac + P26rac + P27rac,
+           Wine = P96rac,
+           Fish = P35rac + P36rac + P37rac + P38rac,
+           Poultry = P33rac,
+           LegumesAndMore = P46rac + P53rac + P54rac,
+           Potatoes = P43grCom +  P44grCom +  P45grCom,
+           Eggs = P28rac,
+           Sweets = P69rac + P70rac + P71rac + P72rac + P73rac,
+           Meat = P29rac + P30rac + P31rac + P32rac,
+           OOprincipal = Oil,
+            
+        # group of arguments about energy intake to compute correction factor:
+           WholeCerealsK = P56Kcal + ifelse(nutriSample$P63_2 == 2, nutriSample$P61Kcal, 0),
+           FruitK = P50Kcal + P52Kcal,
+           VegetablesK = P41Kcal + P42Kcal,
+           DairyK = P19Kcal + P20Kcal + P21Kcal + P22Kcal + P23Kcal + 
+             P24Kcal + P25Kcal + P26Kcal + P27Kcal,
+           WineK = P96Kcal,
+           FishK = P35Kcal + P36Kcal + P37Kcal + P38Kcal,
+           PoultryK = P33Kcal,
+           LegumesAndMoreK = P46Kcal + P53Kcal + P54Kcal,
+           PotatoesK = P43grCom +  P44grCom +  P45grCom,
+           EggsK = P28Kcal,
+           SweetsK = P69Kcal + P70Kcal + P71Kcal + P72Kcal + P73Kcal,
+           MeatK = P29Kcal + P30Kcal + P31Kcal + P32Kcal,
+           OliveOilK = AceiteKcal,
+           Kcal = totalKcal,
+         
+        # final arguments:
+           Sex = SEXO, men = "Hombre", women = "Mujer",
+           output = "percent", frequency = "daily", rm.na = FALSE)
+```
+
+
+### We store them together
+We store all computed scores in the same data frame
+```{r}
+scores <- data.frame(MDS05, MDS12, Pitsavos, Predimed, MDQI, Cardio, 
+                     MDP02, RMed, Sofi, Goulet, MSDPS, MAI)
+
+knitr::kable(head(scores))
+```
+
+We have not incluided MAI score, as it has not a percentage.
+
+
+## Do they correlate?
+As we said above, it has been pointed out that different scores do not correlate as it could be desirable. 
+
+Here we are doing a correlation matrix of the scores in our sample:
+
+```{r}
+knitr::kable(round(cor(scores, use = "pairwise.complete.obs"), 2))
+```
+
+Correlations are not as high as expected.
+
+
+Know, we are plotting histograms of the different scores, all measured as percentage.
+```{r}
+for(i in 1:ncol(scores)){
+  hist(scores[ ,i], main="", xlab=names(scores)[i], xlim=c(0,100))
+}
+```
+
+It is clear that some of them tend to provide higher scores than others, and also that some of them have wider bars than others.
+MAI, as it has been said, is quite different.
+
+We expect that if different scores are used along samples, our understanding of the advantages and flaws of each one could improve. This way we could better measure such a difficult thing to measure as MedDiet adherence.

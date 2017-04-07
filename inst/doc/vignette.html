@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Miguel Menéndez" />
+
+<meta name="date" content="2017-04-07" />
+
+<title>MedDietCalc</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">MedDietCalc</h1>
+<h4 class="author"><em>Miguel Menéndez<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></em></h4>
+<h4 class="date"><em>2017-04-07</em></h4>
+
+
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::opts_chunk$<span class="kw">set</span>(<span class="dt">encoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</code></pre></div>
+<div id="objective-and-vignette-plan" class="section level1">
+<h1>Objective and vignette plan</h1>
+<p>This vignette shows the use of MedDietCalc package both at individual and epidemiological level.</p>
+<ol style="list-style-type: decimal">
+<li>Check individual level adherence to Mediterranean Diet (MedDiet)</li>
+<li>Supose a nutriepidemiological study where scores are involved
+<ul>
+<li>compute cardiovascular risk, as dependent variable</li>
+<li>compute MedDiet adherence, as study variable</li>
+<li>measure agreement between MedDiet adherence scores</li>
+</ul></li>
+</ol>
+<hr />
+</div>
+<div id="use-at-individual-level" class="section level1">
+<h1>1. Use at individual Level</h1>
+<p>Supose two people whose weekly food intake is the following. We have stored it as servings:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MaleA &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Bread =</span> <span class="dv">14</span>, <span class="dt">WholeBread =</span> <span class="dv">14</span>, <span class="dt">Potatoes =</span> <span class="dv">3</span>, <span class="dt">Pasta =</span> <span class="dv">5</span>, 
+                    <span class="dt">Fruits =</span> <span class="dv">14</span>, <span class="dt">Legumes =</span> <span class="dv">3</span>, <span class="dt">Nuts =</span> <span class="dv">5</span>, <span class="dt">Vegetables =</span> <span class="dv">21</span>, 
+                    <span class="dt">Oil =</span> <span class="st">&quot;Olive Oil&quot;</span>, <span class="dt">OliveOil =</span> <span class="dv">25</span>, <span class="dt">Dairy =</span> <span class="dv">14</span>, 
+                    <span class="dt">WholeDairy =</span> <span class="dv">7</span>, <span class="dt">Fish =</span> <span class="dv">2</span>, <span class="dt">Poultry =</span> <span class="dv">2</span>, <span class="dt">Eggs =</span> <span class="dv">4</span>, <span class="dt">Meat =</span> <span class="dv">3</span>, <span class="dt">Wine =</span> <span class="dv">7</span>)
+
+MaleB &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Bread =</span> <span class="dv">6</span>, <span class="dt">WholeBread =</span> <span class="dv">0</span>, <span class="dt">Potatoes =</span> <span class="dv">6</span>, <span class="dt">Pasta =</span> <span class="dv">4</span>, 
+                    <span class="dt">Fruits =</span> <span class="dv">5</span>, <span class="dt">Legumes =</span> <span class="dv">1</span>, <span class="dt">Nuts =</span> <span class="dv">1</span>, <span class="dt">Vegetables =</span> <span class="dv">10</span>, 
+                    <span class="dt">Oil =</span> <span class="st">&quot;Olive and Seeds Oil&quot;</span>, <span class="dt">OliveOil =</span> <span class="dv">14</span>, <span class="dt">Dairy =</span> <span class="dv">28</span>, 
+                    <span class="dt">WholeDairy =</span> <span class="dv">28</span>, <span class="dt">Fish =</span> <span class="dv">4</span>, <span class="dt">Poultry =</span> <span class="dv">4</span>, <span class="dt">Eggs =</span> <span class="dv">8</span>, <span class="dt">Meat =</span> <span class="dv">5</span>, <span class="dt">Wine =</span> <span class="dv">0</span>)
+
+<span class="kw">library</span>(knitr)
+<span class="kw">kable</span>(<span class="kw">t</span>(<span class="kw">rbind</span>(<span class="dt">MaleA =</span> MaleA, <span class="dt">MaleB =</span> MaleB)))</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="left">MaleA</th>
+<th align="left">MaleB</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Bread</td>
+<td align="left">14</td>
+<td align="left">6</td>
+</tr>
+<tr class="even">
+<td>WholeBread</td>
+<td align="left">14</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td>Potatoes</td>
+<td align="left">3</td>
+<td align="left">6</td>
+</tr>
+<tr class="even">
+<td>Pasta</td>
+<td align="left">5</td>
+<td align="left">4</td>
+</tr>
+<tr class="odd">
+<td>Fruits</td>
+<td align="left">14</td>
+<td align="left">5</td>
+</tr>
+<tr class="even">
+<td>Legumes</td>
+<td align="left">3</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td>Nuts</td>
+<td align="left">5</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td>Vegetables</td>
+<td align="left">21</td>
+<td align="left">10</td>
+</tr>
+<tr class="odd">
+<td>Oil</td>
+<td align="left">Olive Oil</td>
+<td align="left">Olive and Seeds Oil</td>
+</tr>
+<tr class="even">
+<td>OliveOil</td>
+<td align="left">25</td>
+<td align="left">14</td>
+</tr>
+<tr class="odd">
+<td>Dairy</td>
+<td align="left">14</td>
+<td align="left">28</td>
+</tr>
+<tr class="even">
+<td>WholeDairy</td>
+<td align="left">7</td>
+<td align="left">28</td>
+</tr>
+<tr class="odd">
+<td>Fish</td>
+<td align="left">2</td>
+<td align="left">4</td>
+</tr>
+<tr class="even">
+<td>Poultry</td>
+<td align="left">2</td>
+<td align="left">4</td>
+</tr>
+<tr class="odd">
+<td>Eggs</td>
+<td align="left">4</td>
+<td align="left">8</td>
+</tr>
+<tr class="even">
+<td>Meat</td>
+<td align="left">3</td>
+<td align="left">5</td>
+</tr>
+<tr class="odd">
+<td>Wine</td>
+<td align="left">7</td>
+<td align="left">0</td>
+</tr>
+</tbody>
+</table>
+<p>A first look at this table shows that MaleA is reasonably adherent to MedDiet: he uses olive oil as dietary fat, eats legumes 3 times a week, has a high intake of fruits and vegetables, also a hich intake of bread and pasta, eats nuts regularly, and his meat intake is not prominent. Last, he has a moderate wine consumption.</p>
+<p>Male B is clearly less adherent to MedDiet tenets: olive oil and seeds oil are used, legumes and nuts intake is scarce, also bread and pasta are eate but not daily, fruits and vegetables intake is not high, has a high intake of dairy, and meat and eggs are more prominent than fish and pultry. Last, he doesn’t drink wine regularly.</p>
+<p>We want to somehow measure this adherence, computing two MedDiet scores for them. For this example we are using the score according to Pitsavos et al<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> and the literature based one according to Sofi et al<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>:</p>
+<p>First we trasnsform variable Oil, which informs about the procedence of dietary oil (seeds oil, olive oil, or both seeds and olive oil) to be usable by formula</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(MaleA$Oil)[<span class="kw">levels</span>(MaleA$Oil) ==<span class="st"> &quot;Olive Oil&quot;</span>] &lt;-<span class="st"> </span><span class="dv">2</span>
+<span class="kw">levels</span>(MaleB$Oil)[<span class="kw">levels</span>(MaleB$Oil) ==<span class="st"> &quot;Olive and Seeds Oil&quot;</span>] &lt;-<span class="st"> </span><span class="dv">1</span></code></pre></div>
+<ul>
+<li>Compute 2 MedDiet scores for MaleA</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(MedDietCalc)
+
+MaleA1 &lt;-<span class="st"> </span><span class="kw">computePitsavos</span>(<span class="dt">data =</span> MaleA, <span class="dt">WholeCereals =</span> WholeBread, <span class="dt">Fruit =</span> Fruits, 
+                          <span class="dt">Vegetables =</span> Vegetables, <span class="dt">Potatoes =</span> Potatoes, <span class="dt">Legumes =</span> Legumes,
+                          <span class="dt">OliveOil =</span> OliveOil, <span class="dt">OOmeasure =</span> <span class="st">&quot;serving&quot;</span>, <span class="dt">Fish =</span> Fish, 
+                          <span class="dt">Meat =</span> Meat, <span class="dt">Poultry =</span> Poultry, <span class="dt">WholeDairy =</span> WholeDairy, 
+                          <span class="dt">Wine =</span> Wine, <span class="dt">output =</span> <span class="st">&quot;percent&quot;</span>, <span class="dt">frequency =</span> <span class="st">&quot;weekly&quot;</span>)
+
+MaleA2 &lt;-<span class="st"> </span><span class="kw">computeSofi</span>(<span class="dt">data =</span> MaleA, <span class="dt">Fruit =</span> Fruits, <span class="dt">Vegetables =</span> Vegetables, 
+                      <span class="dt">Legumes =</span> Legumes, <span class="dt">Cereals =</span> Bread +<span class="st"> </span>Pasta, <span class="dt">Fish =</span> Fish, 
+                      <span class="dt">Meat =</span> Meat, <span class="dt">Dairy =</span> Dairy, <span class="dt">Alcohol =</span> Wine, <span class="dt">OliveOil =</span> Oil, 
+                      <span class="dt">output =</span> <span class="st">&quot;percent&quot;</span>, <span class="dt">frequency =</span> <span class="st">&quot;weekly&quot;</span>)</code></pre></div>
+<ul>
+<li>Compute 2 MedDiet scores for MaleB</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MaleB1 &lt;-<span class="st"> </span><span class="kw">computePitsavos</span>(<span class="dt">data =</span> MaleB, <span class="dt">WholeCereals =</span> WholeBread, <span class="dt">Fruit =</span> Fruits, 
+                          <span class="dt">Vegetables =</span> Vegetables, <span class="dt">Potatoes =</span> Potatoes, <span class="dt">Legumes =</span> Legumes,
+                          <span class="dt">OliveOil =</span> OliveOil, <span class="dt">OOmeasure =</span> <span class="st">&quot;serving&quot;</span>, <span class="dt">Fish =</span> Fish, 
+                          <span class="dt">Meat =</span> Meat, <span class="dt">Poultry =</span> Poultry, <span class="dt">WholeDairy =</span> WholeDairy, 
+                          <span class="dt">Wine =</span> Wine, <span class="dt">output =</span> <span class="st">&quot;percent&quot;</span>, <span class="dt">frequency =</span> <span class="st">&quot;weekly&quot;</span>)
+
+MaleB2 &lt;-<span class="st"> </span><span class="kw">computeSofi</span>(<span class="dt">data =</span> MaleB, <span class="dt">Fruit =</span> Fruits, <span class="dt">Vegetables =</span> Vegetables, 
+                      <span class="dt">Legumes =</span> Legumes, <span class="dt">Cereals =</span> Bread +<span class="st"> </span>Pasta, <span class="dt">Fish =</span> Fish, 
+                      <span class="dt">Meat =</span> Meat, <span class="dt">Dairy =</span> Dairy, <span class="dt">Alcohol =</span> Wine, <span class="dt">OliveOil =</span> Oil, 
+                      <span class="dt">output =</span> <span class="st">&quot;percent&quot;</span>, <span class="dt">frequency =</span> <span class="st">&quot;weekly&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">kable</span>(<span class="kw">data.frame</span>(<span class="dt">MaleA =</span> <span class="kw">c</span>(MaleA1, MaleA2), <span class="dt">MaleB =</span> <span class="kw">c</span>(MaleB1, MaleB2), 
+                 <span class="dt">row.names =</span> <span class="kw">c</span>(<span class="st">&quot;score1&quot;</span>, <span class="st">&quot;score2&quot;</span>)))</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">MaleA</th>
+<th align="right">MaleB</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>score1</td>
+<td align="right">69.1</td>
+<td align="right">56.4</td>
+</tr>
+<tr class="even">
+<td>score2</td>
+<td align="right">83.3</td>
+<td align="right">50.0</td>
+</tr>
+</tbody>
+</table>
+<p>We can notice that both scores agree considering MaleA more adherent to MedDiet than MaleB.</p>
+<p>Both scores more or less agree in the score of MaleB (50% vs 56%), but differences in measuring MaleA diet are higher (69% vs 83%).</p>
+<p>If we advise MaleB to change his diet, becoming more adherent to MedDiet, we could use this scores to measure changes.</p>
+<hr />
+</div>
+<div id="use-at-epidemiological-level" class="section level1">
+<h1>2. Use at epidemiological level</h1>
+<div id="hypothetical-nutriepidemiological-study" class="section level2">
+<h2>Hypothetical nutriepidemiological study</h2>
+<p>Let’s imagine we are conducting a study in which we want to test the hypothesis:</p>
+<blockquote>
+<p><em>MedDiet is associated with lower cardiovascular risk.</em></p>
+</blockquote>
+<p>To test it, we have collected data from four Spanish regions.</p>
+<p>As dependent variable we plan to use the 10-year cardiovascular risk, computed with a risk score developed in Spanish population<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a>. As study variable we want to use MedDiet adherence, measured with a score, but <strong>which score to use?</strong></p>
+<p>This package provides functions to compute the following MedDiet adherence scores:</p>
+<ul>
+<li>Cardioprotective Mediterranean Diet Index, from Martínez-González et al.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a> in function computeCardio()</li>
+<li>Score according to Goulet et al. in 2003<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> in function computeGoulet</li>
+<li>MAI (Mediterranean Adequacy Index) according to Alberti-Fidanza et al., 1999<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a> in function computeMAI99()</li>
+<li>MDP (Mediterranean Dietary Pattern), 2002<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a> in function computeMDP02</li>
+<li>MDQI (Mediterranean Diet Quality Index)<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a> in function computeMDQI()</li>
+<li>MDS 1995, fist Mediterranean Adherence score index, developed by Trichopoulou et al.<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a> in function computeMDS95()</li>
+<li>MDS as modified in 2003<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a> in function computeMDS03()</li>
+<li>MDS as modified in 2005<a href="#fn12" class="footnoteRef" id="fnref12"><sup>12</sup></a> in function computeMDS05()</li>
+<li>MDS as modified in 2012<a href="#fn13" class="footnoteRef" id="fnref13"><sup>13</sup></a> in function computeMDS12()</li>
+<li>MSDPS (Mediterranean-Style Dietary Pattern Score)<a href="#fn14" class="footnoteRef" id="fnref14"><sup>14</sup></a> in function computeMSDPS()</li>
+<li>Score according to Pitsavos et al. in 2005<a href="#fn15" class="footnoteRef" id="fnref15"><sup>15</sup></a> in function computePitsavos(). This score can also be found in the literature as Dietary Score<a href="#fn16" class="footnoteRef" id="fnref16"><sup>16</sup></a> <a href="#fn17" class="footnoteRef" id="fnref17"><sup>17</sup></a>, it can also be found in Waijers et al.<a href="#fn18" class="footnoteRef" id="fnref18"><sup>18</sup></a> considered as a derivate from MDS and called MDS-a IV. We have preferred to call it by the name of paper’s first author.</li>
+<li>Score used in PreDiMed trial (Prevención con Dieta Mediterránea, Spanish which means Prevention with Mediterranean Diet)<a href="#fn19" class="footnoteRef" id="fnref19"><sup>19</sup></a> in function computePredimed()</li>
+<li>RMED (Revised Mediterranean Diet adherence score)<a href="#fn20" class="footnoteRef" id="fnref20"><sup>20</sup></a> in function computeRMED()</li>
+<li>Score according to the literature review by Sofi et al. in 2014<a href="#fn21" class="footnoteRef" id="fnref21"><sup>21</sup></a> in function computeSofi()</li>
+</ul>
+<p>Some scores have more than one version, or subtle differences can be found in the Literature in different papers. When this has be found, a number finishes the function’s name, to make it clear which score version has been used. For instance, the function computeMDS95() is the MDS score in its 1995 version.</p>
+</div>
+<div id="compute-dependent-variable" class="section level2">
+<h2>Compute dependent variable</h2>
+<p>We compute risk of fatal vascular event according to FRESCO score.</p>
+<p>With the outcome arguement we can compute just coronary risk (outcome = “Coronary”) or stroke risk (outcome = “Stroke”), or both cerebrovascular and cardiovascular risk. We are set outome = “All”.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(nutriSample)
+
+risk &lt;-<span class="st"> </span><span class="kw">computeFRESCO</span>(<span class="dt">data =</span> nutriSample, 
+    <span class="dt">outcome =</span> <span class="st">&quot;All&quot;</span>, <span class="dt">simplified =</span> <span class="ot">TRUE</span>, 
+    <span class="dt">Sex =</span> SEXO, <span class="dt">Age =</span> EDAD, <span class="dt">Smoker =</span> <span class="kw">ifelse</span>(nutriSample$FUMADOR ==<span class="st"> </span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>),
+    <span class="dt">BMI =</span> nutriSample$peso/(nutriSample$altura)^<span class="dv">2</span>,
+    <span class="dt">men =</span> <span class="st">&quot;Hombre&quot;</span>, <span class="dt">women =</span> <span class="st">&quot;Mujer&quot;</span>)
+    
+<span class="kw">hist</span>(risk, <span class="dt">main =</span> <span class="st">&quot;10-year estimated </span><span class="ch">\n</span><span class="st"> cardiovascular risk&quot;</span>)</code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAMAAAAjXV6yAAAC/VBMVEUAAAABAQECAgIDAwMEBAQFBQUGBgYHBwcICAgJCQkKCgoLCwsMDAwNDQ0ODg4PDw8QEBARERESEhITExMUFBQVFRUWFhYXFxcYGBgZGRkaGhobGxscHBwdHR0eHh4fHx8gICAhISEiIiIjIyMkJCQlJSUmJiYnJycoKCgpKSkqKiorKyssLCwtLS0uLi4vLy8wMDAxMTEyMjIzMzM0NDQ1NTU2NjY3Nzc4ODg5OTk6Ojo7Ozs8PDw9PT0+Pj4/Pz9AQEBBQUFCQkJDQ0NERERFRUVGRkZHR0dISEhJSUlKSkpLS0tMTExNTU1OTk5PT09QUFBRUVFSUlJTU1NUVFRVVVVWVlZXV1dYWFhZWVlaWlpbW1tcXFxdXV1eXl5fX19gYGBhYWFiYmJjY2NkZGRlZWVmZmZnZ2doaGhpaWlqampra2tsbGxtbW1ubm5vb29wcHBxcXFycnJzc3N0dHR1dXV2dnZ3d3d4eHh6enp7e3t8fHx9fX1+fn5/f3+AgICBgYGCgoKDg4OEhISFhYWGhoaHh4eIiIiJiYmKioqLi4uMjIyNjY2Ojo6Pj4+QkJCRkZGSkpKTk5OUlJSVlZWWlpaXl5eYmJiZmZmampqbm5ucnJydnZ2enp6fn5+goKChoaGioqKjo6OkpKSlpaWmpqanp6eoqKipqamqqqqrq6usrKytra2urq6vr6+wsLCxsbGysrKzs7O0tLS1tbW2tra3t7e4uLi5ubm6urq7u7u8vLy9vb2+vr6/v7/AwMDBwcHCwsLDw8PExMTFxcXGxsbHx8fIyMjJycnKysrLy8vMzMzNzc3Ozs7Pz8/Q0NDR0dHS0tLT09PU1NTV1dXW1tbX19fY2NjZ2dna2trb29vc3Nzd3d3e3t7f39/g4ODh4eHi4uLj4+Pk5OTl5eXm5ubn5+fo6Ojp6enq6urr6+vs7Ozt7e3u7u7v7+/w8PDx8fHy8vLz8/P09PT19fX29vb39/f4+Pj5+fn6+vr7+/v8/Pz9/f3+/v7///+VQdGxAAAACXBIWXMAAA7DAAAOwwHHb6hkAAASJklEQVR4nO2de1wVZfrAH0BJDiAXEVBUDPDuSqllq2YiZualTGs3s8xblOI1ddFNzcqfCpbazUzNNe9SpIa2aeXa6mZpq667uoaym9paIZoaKrfzfn7vvHMOvMOZmefAmQPD8H7/mAvvM89558tczjnPzBwgAl2gpjtgdoQgBCEIQQhCEIIQhCAEIQhBCEIQghCEIAQhCEEIQhCCEIQgBCEIQQhCEIIQhCAEIQjBK4L6w142PvloZIMOr5ca/wLDAIqrstxXAAsruYg3BB3xlQV91xAkphiZ+/C8eTluCJLDXDCFoMKNUSALGg4wb2snALWuVpUVAJ8QMj0xUV+QHOaCGQSN8pW2GklQcSgMJeRrgDcMTK+x5m6GmUHQw+AURHuzlGqywUOOpt8DfEpHqQAnCTn9u7iQXm/Z6bw9s2dkQKvU83SyC8T8+nTweTm8PIL8OTk6sOOsS4QkS8m7kQfgNkLaQIeTfUO6vmbP7B7Y7l07n8gRxqf4/vdN4iZ/aQJBlDdkQVkAmXQUB10cf/8IYDIdJcBvCPk8kIkcSju/jE1B62tM0GMAsiAuYr0c0e4aeSoCIHqYU1B4uPTnR3ykYSafyBHGpTgVKU21N5Wg9wB20VEnSHD8/VYIxNnJWYCXSXF7aPHxkZEAWaQ4CGKXbukLsEMSVA8iO12UgrkIEguh67LHASxx7jsOQZCY3p+u9p3p/YBupnwiFsanGAwwcMUQMJWg1wE+o6NuEOVsGC3tXLTvp8mnAFuohBjoRc4NHEhXYA9b/S4AcxzvCriIX+nu8guxpzy9soKgej+SG0Hg/zMpCKJbJZ+IhXEpcgHuKyX2fqYSRLegbDpKhPZk40DKHKnz6WQI3MHkNYuPj28AkTSi9MiK51oAZLAtqNCRhIsobQzQYODb/5X+rBAUR/8QD63ZsIMiEQvjUuwCWEPYvmoiQVnsH0gPOclknnQAeIAUR0KvomCpjzPAyXWymb4tgDCHoKbOJHzEvgQ2kXyugqA2xKmGDblELIxL4TirfWEqQYek7YUUBcAIpyAyEfx2AJwhJB3gH47oU37QZsWpAw5BMc4kXATdNPZPiaUZ+ugK4hOxMC7FdoD36GiTqQQVh0E/O9kPsLys5SBAW+hK2AltNR0d/+sh8g7ANkKWVBTERXyVmnqC2A/GQCBb890agvhELIxLcRogyU7sA0wliIwAGLWgBdiulLXYpe2AblakIAaaZh1a6g+jyZ8Aem1ND6woiIv4FuCujX9ZFQaJhKwCWFCsLohPxMK4FISe3AavGGqusxjJCWEHgBe4pjQ6/x9p4sP6rK3tD+RckDRBz19/VAjiIuzDHYeSDYR8yb9RVAriE8lh5SnI38OkqSbmEkRODosI7q74NH+MvcGV+Pvg5rb2L16mU/vvsSWm/1IfQm8oBHERhat7NKnfrL90mLXPitASxCeSw7gU5PSj0bHPfW4OQTpcB3itel/RU6pV0NXvx4Hv+ep8Rc+pVkGb6WFgRHW+oAFUq6AP/EKGX63OFzQA8Z00ghCEIAQhCEEINSBI/mK4qpUbF9ibRn0qvpb85tI9hCCEGhOEVm7cxQ1BFV+rVggyDDcEVaRGBeVPSLS1Sb1EVMs5XO1FXq+b837bsMWDUjFoEsA+OnpE+j6NW7K84sOnjmGVko8BVjkSaZSOHNPya5VnYoK+9oc7rle/oP80Zd8wNMtXK+fwtRfW6Uvt5JjZRPpibRYhJaHSN9bckuUVHz61iyCN0pFjmoVwmSRBPzWDpu58LDRa0HCAlKyJAOPVyjl87YV1ejxA0ualoeBzlJRESWqOsJoQtyRX8SlP7SJIo3TknGavxWWigoruA9u37qyQwYIuA/QnpLQV3K5SzlHUXqROF/hCG3r03AswlpAJABfJYqkwxC3JVXy41C6CNEpHzmkphK8dUUHTwGeHW2tksCC6BSyjox9OnLC7lnMUtRep08cB5tM/2KOgJ6s4rCP9oL2UpmxJruLDp3bZxdRLR85pKYSvHcWDP0BUgVtrZLCgj6S1dOBSzlHUXqROZ7M1JKQzNCOkuDE8URgAc5RLlld8+NQugtRLR85pFsLVjuLZ1AK31shgQfQU/qpj0rWco6i98FtQNNxDR89CxD6AY8olyys+XGoq6E46/KBMkEbpyDnt2MjKakdU0JhoCP7JnTUyWFCeXF7pH9PZ7lrOUdReHMegtsXs2DGasEPRAEiguya3JFfx4VKTVhB+i10m4hCkUTriBfG1o3hoUfQGwIQaEEQeoiu7dSTAM2rlHL72wv6rz9F/6BZ6FvOVTihFjWhLGp3gluQrPuWpCXX84PKnoEyQRumIF8Rnkk7zt5qD379rQNDpxmz/vj1frZzD117k90Ft5Tcnc9my9BwM39AxtyRf8SlPTXaDI8J5FtMoHXGC+EzsjeJKgIdrQBD5aVyHgLbTNMo5XO3F8U56Trfg5gM+kxf9M0ALdrETtyRX8eFSk82dArss3Vl+kNYoHfHHIC4TE1R0O8B+fH3E90EIQhCCEIQgBCEIQQhCEIIQhCAEIQhBCEIQghCEIAQhCEEIQhCCEIQgBCEIQQhCEIIQhCAEIQhBCEIQghCEIAQhmFnQ4ccUZNRIJ8ws6O1+2zjS76iRTpha0Hh+7mgtEWS/mm/3RkdUqIWCctISbgPwj/vDGS91R0HtE/RNw6Ypy95ft3xCbIhbV4h6SO0T1Ps+x5XXtx7u443OVKD2CWq42jn1cYjxXXGh9gm6a4Tz+Dztbi/0pSK1T9A2n+RVB0+e+tt7g3wzvdUhjtoniGQnydf5JWV7qTsKaqEgQi4d37Pn2KUKf7x1xMkeladKFn97hMf9dwi1UpBE0Ud5yj8c7OIkaLdr+O6QLhyJ0W6/Tq0VdIXd2aXKPV+5/m3nYH4uL8Lt16l9gkbIPAZ9R2g8YcLCgv7PjQeK9oGgHpRu0LFHD/UICwsKgc6LsONn6dtBI/Pr6i5W+Mm4xtBl8Vn98Nyk6B11VBClZN+kZtA1PVcvvvStwCfP1FVB5H+rH/LxCYGhuje75iaF1UlB9m/nd4UGg1f/WLyrTbLuIqVrpmserCwsqAk0Hr1dvo1zWaMqp7OwoD8cKHFO5p+rcjoLCyIX11wmFxZX3Q3DwoIOhfldILmNQ77xKJ2FBd3bU7ql/OaDvT1KZ2FBgVvYaFuwR+ksLChBruwujvconYUFvRC0qZAUZwbP9CidhQUVj/XxifCD393yKJ2FBRHy3YaFa094mM7SgozAwoLyJ9wtf2nsUToLCxp226g0hkfpLCwo+M2qJ7m210m7A66tFhHUVqVg4y5H+joJ/di11SKC0oeU6MW5iYV3sfXd281Mz6B4lM7CgmKdeJTOwoKMwYuCvghVXBQ80gu/LakGL6jovwWeXp/pRUFb/PmLgrf536hiFytJuaD1Cb5wdPTLninypqAARWNAdQvaCI/vgKPv+C7zKJ2FBXUYSWeOkpltPUpnYUEBW5igrQF60SgWFnTHZCZoTieP0llY0CqftH/Cp2tsy/WiUWRB7/OXlHVJaM1H1FpB9iXSr4HZ5hpxFpudyl+UOC6Kj6i1guhn8kOZB69oR7qFQ5DiQbsvWEWQe+jf7WNhQQ840YtG7/bxUNCFvTyTR/FtNS1oLGXMgIa/eVknGL/bx0NBozr05YjuyLfVtCCZy93W6ATjd/t4KGjkOn7uccWvX5hDEMlK1AnG7/axvqD1gTrB+N0+Fha0lrG4sd6dcvjdPhYWFMho2Fv3enL0bh8LC3IT1bt9fl610kE8e8Z3HRZUnCtf5/nrRf6vJ1KcRLFnq1tSUCMejeCS+QHgP7WITmVoiLXwLrYjsvn012bGhr++gqIRvNxncuZUP+lGnzooKKXHTTq81WOiTnD7VDpYC1l1UlCTP7HR2mY6wQGbpeGwuJt1UVBz+UPYS010gttMlYbnQ8fY66CgibbMUlKaGTBKJ3iJT8p22q+tMHZ83RN0YxAEtwmGe/S+MiteGAqn6HhbJNQ9QYR8vWz64j3IN672C9KhnBR+9q56u6UFGVd6tqYgA0vPlhRkZOnZkoKMLD1bUpCRpWdLCjKy9GxJQUaWni0pyNDSsxUF5eSboPRcZUFFl3k8XQueMkFhU41IV1OCBgeHcTR43f0eY5TfUJfg3m8f61NTgpK+4Odmu/crxW5RJmhTUsvnFxl0IbklBRl5Ibn1BO39waMk5xc5iWUdtZ4gWEtIwTzk2UHa5KQ5idkrzVtTUB7s9TydVXcxIUgTIQjBkoIGhMfxzMB6rYclBXXveZZjleJC9sriEBTYqFEYBOvV5d3DJILu5+d2GiBoCocn2SwryDCEIAQhCEEIQhCCEIQgBCEIQQhCEIIQhCAENwSF85+TziofjVoJQQ3+xaf5rY6gHcmKV/y5cmtU7XccngXFJ+363/ONlRDk05JP46so9CgFzffjI2NjtHuvRuUEGXDH4WlfxQKtvuPnKiEI8vm5sFf5OaWgKt8SKr9OZYKNuOPQ0oKMuOPQ0oK07jh0qWr0SuPoHsjPPePDz6XZUvi5jkn8XLsIfu7heooFYQo/16APPxdzu/brT/amIK07DsvrYmN/lOaPL+KZk8LPLXxS0fj0An5u/Gx+Lm0iP/fyKMWCyjRjXuTnpkzXfv1F73tRUDX/vpgpqNxZrHp/X8wUGHLHYUV2vbJSk3cmabetnJ2h3fbmNJ0FZyzXblv6TlXlSBj8TlrmqbtTNBnZQLstpXWSdtuwRjoLNh2k3dbfo8fTekWQXuGuEp/FlOg+JlD5WUyJqT6LyQhBCEIQghCEIAQhCEEIQhCCEIQwN1277YreD9GO2aTddqKrzoL3/1W77ZNHdBZE8YqgAr37KPQ+p1wtquKCel8Dl3h0Z4JXBFkJIQhBCEIQghCEIAQhCEEIQhCCEIQgBCEIQQhCEIIQjBdU8mo7W8c3tH+Lq7TPCI2WE4PDW7yk8ZM9xRmtbXduVW2aMZ2NMruF9DlcmY66h/GCFvpM3jTeZ75m+9ugIejfEQNWj4dF6o3z/GauHwEqP+9GcsKZoGzfJ1bdG6L7JNoqYbgge9gzdDgpoFijPTcoSEPQM73oZjd9mHpj02dp6q5DXP6+v2c9YIKS+tjJtSae/UKjGoYLugDb6TATctWbS5Oe6qEu6FbwRqK5Y9oj5tDhoP4uDScyMtgWdAmkp6qlJFS+wwiGC7p5Svq2bKq/xnMc3orO1xB0Fjbe6x/zosaWNzXqy1+21F+v1hQvCToOB+lw2W2ePoTNBe+cxdb6adx2lhu4nWgIOgC2Gbvm1purvmBpTwB4XrWJCdoDJ+nwfbha+c7q4w1BFx6FJwpVW0qTqBwNQdkwjQ6n2lQ3Ifuz0Sv3LQhWvU7DIUh6wOM6wC48qTReELQtNC5Lo2lN2JkrV7o9dkXtq+ev2T2zO+E7lTayHz6lw1f8f1FpY4KOwd/ocLl/LdjFMmHMTa226fL1V/CRSts5dhL/EP6ntuA6yKPD3Ww/qki8fJBeS4epcVXosD6GCyqMHKv9Xzyzj9Kx7748lTZ7p+F0+GQz1aUPw4d0OMtfbc9lgkjvQfRE2HJmFXqsj+GCPofx0kN2Mn7VjNA4BpGNMHLDGNig2mZ/sOErWyb5qR7BZUHZPs9nDwnRusC96hgu6F3HXnRRM0JLEFl/V1BnrYtDr89qFdDxLdX3SbIgsrVrw6Qjlempe4gPqwhCEIIQhCAEIQhBCEIQghCEIAQhCEEIQhCCEIQgBCEIQQhCEIIQhCAEIQhBCEIQghCEIAQhCEEIQhCCEIQgBCEIQQhCEIKpBV2Hp8um82BfjfTB1IJuJC8umxaCEISgCsRumhOeE5tByLEHQsMfOccElQyPUr3+zJuYV1Cf+Mn5VFBBVLeVSxrfLwmyPxd6vNr7YV5BLQvoIIMclq7v3TDGTgXNsh2s/n6YV5B0zS8V9JPt7u3XiHQMegjaa12+70XMK0i6aUM6Bh3o7es39BAVFLAY3qz+fphXUIZzQC5nJfnl5ME68nh4PrKU8Zhe0AcJ+dJtCruks9i5gNRq74fpBeX4J69e2Ts0j70Pesn3H9XdD9MLIjs728L7HZbfKN5omWT4pfQIphVkFoQgBCEIQQhCEIIQhCAEIQhBCEIQghCEIAQhCEEIQhCCEIQgBCEIQQhCEIIQhCAEIQhBCEIQghCEIAQhCEEIQhCCEP4fPACx1Vcoky4AAAAASUVORK5CYII=" /><!-- --></p>
+<p>We can see that high risk is infrequent in our sample. Which could be expected in our Spanish low risk population.</p>
+</div>
+<div id="which-meddiet-adherence-score-to-use" class="section level2">
+<h2>Which MedDiet adherence score to use?</h2>
+<p>As there are a lot of them, and it has been suggested that they had sometimes low correlation<a href="#fn22" class="footnoteRef" id="fnref22"><sup>22</sup></a>, we are going to test the scores in our sample.</p>
+<p>The first MedDiet score I am going to use is the 2005 version of MDS, an update of the landmark first mediterranean diet adherence score developed by Antonia Trichopoulou and coleagues.</p>
+<p>With this questionnaire we will look at the ‘output’ argument, with it we can ask the formula to provide the ouput in one of three ways:</p>
+<ul>
+<li>a numeric index of adherence, which is the usual in the literature</li>
+<li>this adherence as percentage, according to the maximum score possible to reach. This way is more intuitive to quickly read the output (for instance, the above example of MaleA and MaleB, we didn’t need to know the scale of this scores, and with a percentage we have quickly compared them)</li>
+<li>as a data frame, which additionaly informs us of the individual points reached in each score item. Thus, it provides a bit more insight about the performing of the score in our sample.</li>
+</ul>
+<p>This step (to set output argument to ‘data.frame’) should be performed with each score, as it can show inconsistencies, or too high or too low scores in specific score items, but to make the vignette brief, we will show it just with this frist score.</p>
+<div id="mds" class="section level3">
+<h3>MDS</h3>
+<p>I set output as ‘data.frame’, to check wether inconsistencies are apparent</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MDS05 &lt;-<span class="st"> </span><span class="kw">computeMDS05</span>(<span class="dt">data =</span> nutriSample,
+        <span class="dt">Vegetables =</span> P41grCom +<span class="st"> </span>P42grCom,
+        <span class="dt">Legumes =</span>  P46grCom,
+        <span class="dt">FruitAndNuts =</span>  P50grCom +<span class="st"> </span>P52grCom +<span class="st"> </span>P53grCom,
+        <span class="dt">Cereals =</span> P55grCom +<span class="st"> </span>P56grCom +<span class="st"> </span>P57grCom +<span class="st"> </span>P59grCom +<span class="st"> </span>
+<span class="st">          </span>P60grCom +<span class="st"> </span>P61grCom +<span class="st"> </span>P62grCom,
+        <span class="dt">Fish =</span> P35grCom +<span class="st"> </span>P36grCom +<span class="st"> </span>P37grCom +<span class="st"> </span>P38grCom,
+        <span class="dt">Meat =</span> P29grCom +<span class="st"> </span>P30grCom +<span class="st"> </span>P31grCom +<span class="st"> </span>P32grCom,
+        <span class="dt">Dairy =</span> P19grCom +<span class="st"> </span>P20grCom +<span class="st"> </span>P20grCom +<span class="st"> </span>P22grCom +<span class="st"> </span>P23grCom +<span class="st"> </span>
+<span class="st">          </span>P24grCom +<span class="st"> </span>P25grCom +<span class="st"> </span>P26grCom +<span class="st"> </span>P27grCom,
+        <span class="dt">Alcohol =</span>  <span class="dv">12</span> *<span class="st"> </span>(P94rac +<span class="st"> </span>P96rac +<span class="st"> </span>P97rac +<span class="st"> </span>P98rac +<span class="st"> </span>P99rac),
+        <span class="dt">Potatoes =</span>  <span class="ot">NULL</span>, 
+        <span class="dt">MUFA =</span>  totalGrasaMonoins,
+        <span class="dt">PUFA =</span>  totalGrasaPoliins,
+        <span class="dt">SFA =</span>  totalGrasaSat,
+        <span class="dt">Sex =</span>  SEXO, <span class="dt">men =</span> <span class="st">&quot;Hombre&quot;</span>, <span class="dt">women =</span> <span class="st">&quot;Mujer&quot;</span>, <span class="dt">frequency =</span> <span class="st">&quot;daily&quot;</span>, 
+        <span class="dt">output =</span> <span class="st">&quot;data.frame&quot;</span>, <span class="dt">rm.na =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<pre><code>## Warning in computeMDS05(data = nutriSample, Vegetables = P41grCom +
+## P42grCom, : Potatoes consumption has not been included in cereals scoring,
+## as 'Potatoes' argument has not been provided</code></pre>
+<p>We get a warning informing us than potatoes have not been computed, and we agree. When MDS questionnaire was developed in 1990s, potatoes were think to have a relevant role in health outcomes, and were computed with cereals, but later research has challenged this view. This formula allows the user to compute potatoes with cereals, although probably at present no researcher will want to combine them.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">kable</span>(<span class="kw">head</span>(MDS05))</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Vscore</th>
+<th align="right">Lscore</th>
+<th align="right">Frscore</th>
+<th align="right">Cscore</th>
+<th align="right">Fiscore</th>
+<th align="right">Mscore</th>
+<th align="right">Dscore</th>
+<th align="right">Ascore</th>
+<th align="right">Fatscore</th>
+<th align="right">absolute</th>
+<th align="right">percent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">33.3</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">55.6</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">44.4</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">8</td>
+<td align="right">88.9</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">6</td>
+<td align="right">66.7</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">11.1</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">kable</span>(<span class="kw">round</span>(<span class="kw">apply</span>(MDS05, <span class="dv">2</span>, mean),<span class="dv">2</span>))</code></pre></div>
+<table>
+<tbody>
+<tr class="odd">
+<td align="left">Vscore</td>
+<td align="right">0.64</td>
+</tr>
+<tr class="even">
+<td align="left">Lscore</td>
+<td align="right">0.51</td>
+</tr>
+<tr class="odd">
+<td align="left">Frscore</td>
+<td align="right">0.50</td>
+</tr>
+<tr class="even">
+<td align="left">Cscore</td>
+<td align="right">0.59</td>
+</tr>
+<tr class="odd">
+<td align="left">Fiscore</td>
+<td align="right">0.51</td>
+</tr>
+<tr class="even">
+<td align="left">Mscore</td>
+<td align="right">0.49</td>
+</tr>
+<tr class="odd">
+<td align="left">Dscore</td>
+<td align="right">0.49</td>
+</tr>
+<tr class="even">
+<td align="left">Ascore</td>
+<td align="right">0.22</td>
+</tr>
+<tr class="odd">
+<td align="left">Fatscore</td>
+<td align="right">0.50</td>
+</tr>
+<tr class="even">
+<td align="left">absolute</td>
+<td align="right">4.45</td>
+</tr>
+<tr class="odd">
+<td align="left">percent</td>
+<td align="right">49.42</td>
+</tr>
+</tbody>
+</table>
+<p>In this table, each row is a person, the columns are the individual items that conform this score: ‘<strong>V</strong>score’ is the points people have obtained in ‘<strong>V</strong>egetables’ item, ‘<strong>L</strong>score’ in <strong>L</strong>egumes, ‘<strong>Fr</strong>score’ in <strong>Fr</strong>uits, and so on. For further details, references of each score development should be consulted.</p>
+<p>Last columns are:</p>
+<ul>
+<li><p>‘absolute’, the total score each person has got, and the output when ouput = ‘score’. Usually absolute socre is the sum of each individual items, but scoring schema could vary among questionnaires. To understand the meaning of this ‘absolute’ number -for instance, 3 for the first person-, you need to know that maximun possible is 9. Studies developing or using MedDiet scores tend to use absolute adherence scores.</p></li>
+<li><p>‘percent’, which is the same score but as a percentage. For the first person, who had 3 points out of 10 possible points, it is 33.3%.</p></li>
+</ul>
+<p>Now we can look for variables with too many missing data, or with too high or too low scores. For instance, if legumes consumption receives full score too often it’s reasonable to check data for units mistakes, or wether if the sample has special patterns of feeding.</p>
+<p>Now that we have checked it for unexpected behaviour, we keep just the percent of adherence, which is more intuitive.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MDS05 &lt;-<span class="st"> </span>MDS05$percent</code></pre></div>
+<p>I compute others, each of them with their particularities</p>
+</div>
+<div id="mds-2012-update" class="section level3">
+<h3>MDS 2012 update</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MDS12 &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">computeMDS12</span>(<span class="dt">data =</span> nutriSample,
+               <span class="dt">Vegetables =</span> P41grCom +<span class="st"> </span>P42grCom,
+               <span class="dt">Legumes =</span>  P46grCom,
+               <span class="dt">FruitAndNuts =</span>  P50grCom +<span class="st"> </span>P52grCom +<span class="st"> </span>P53grCom,
+               <span class="dt">Cereals =</span> P55grCom +<span class="st"> </span>P56grCom +<span class="st"> </span>P57grCom +<span class="st"> </span>P59grCom +<span class="st"> </span>
+<span class="st">                 </span>P60grCom +<span class="st"> </span>P61grCom +<span class="st"> </span>P62grCom,
+               <span class="dt">Fish =</span> P35grCom +<span class="st"> </span>P36grCom +<span class="st"> </span>P37grCom +<span class="st"> </span>P38grCom,
+               <span class="dt">Meat =</span> P29grCom +<span class="st"> </span>P30grCom +<span class="st"> </span>P31grCom +<span class="st"> </span>P32grCom,
+               <span class="dt">Dairy =</span> P19grCom +<span class="st"> </span>P20grCom +<span class="st"> </span>P20grCom +<span class="st"> </span>P22grCom +<span class="st"> </span>P23grCom +<span class="st"> </span>
+<span class="st">                 </span>P24grCom +<span class="st"> </span>P25grCom +<span class="st"> </span>P26grCom +<span class="st"> </span>P27grCom,
+               <span class="dt">Alcohol =</span>  <span class="dv">12</span> *<span class="st"> </span>(P94rac +<span class="st"> </span>P96rac +<span class="st"> </span>P97rac +<span class="st"> </span>P98rac +<span class="st"> </span>P99rac),
+               <span class="dt">Potatoes =</span>  <span class="ot">NULL</span>,
+               <span class="dt">OOprincipal =</span> <span class="kw">ifelse</span>(nutriSample$AceiteTipo ==<span class="st"> </span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>),
+               <span class="dt">Sex =</span>  SEXO, <span class="dt">men =</span> <span class="st">&quot;Hombre&quot;</span>, <span class="dt">women =</span> <span class="st">&quot;Mujer&quot;</span>, 
+               <span class="dt">frequency =</span> <span class="st">&quot;daily&quot;</span>, <span class="dt">output =</span> <span class="st">&quot;percent&quot;</span>, <span class="dt">rm.na =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<pre><code>## Warning in computeMDS12(data = nutriSample, Vegetables = P41grCom +
+## P42grCom, : Potatoes consumption has not been included in cereals scoring,
+## as 'Potatoes' argument has not been provided</code></pre>
+<p>We get the same warning about potatoes.</p>
+</div>
+<div id="pitsavos" class="section level3">
+<h3>Pitsavos</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Pitsavos &lt;-<span class="st"> </span><span class="kw">computePitsavos</span>(<span class="dt">data =</span> nutriSample,
+  <span class="dt">WholeCereals =</span> P56rac +<span class="st"> </span><span class="kw">ifelse</span>(nutriSample$P63_2 ==<span class="st"> </span><span class="dv">2</span>, nutriSample$P61rac, <span class="dv">0</span>),
+  <span class="dt">Fruit =</span> P50rac +<span class="st"> </span>P52rac,
+  <span class="dt">Vegetables =</span> P41rac +<span class="st"> </span>P42rac,
+  <span class="dt">Potatoes =</span> P43rac +<span class="st"> </span>P44rac +<span class="st"> </span>P45rac,
+  <span class="dt">Legumes =</span> P46rac,
+  <span class="dt">OliveOil =</span> Aceitegr,
+  <span class="dt">OOmeasure =</span> <span class="st">&quot;gr&quot;</span>,
+  <span class="dt">Fish =</span> P35rac +<span class="st"> </span>P36rac +<span class="st"> </span>P37rac +<span class="st"> </span>P38rac,
+  <span class="dt">Meat =</span> P29rac +<span class="st"> </span>P30rac +<span class="st"> </span>P31rac +<span class="st"> </span>P32rac,
+  <span class="dt">Poultry =</span> P33rac,
+  <span class="dt">WholeDairy =</span> P19grCom +<span class="st"> </span>P22grCom,
+  <span class="dt">Wine =</span> P96rac,
+  <span class="dt">output =</span> <span class="st">&quot;percent&quot;</span>, <span class="dt">frequency =</span> <span class="st">&quot;daily&quot;</span>, <span class="dt">rm.na =</span> <span class="ot">FALSE</span>)</code></pre></div>
+</div>
+<div id="predimed" class="section level3">
+<h3>Predimed</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Predimed &lt;-<span class="st"> </span><span class="kw">computePredimed</span>(<span class="dt">data =</span> nutriSample, <span class="dt">OliveOil =</span> Aceitegr, <span class="dt">OOmeasure =</span> <span class="st">&quot;gr&quot;</span>,
+                  <span class="dt">OOprincipal =</span> <span class="kw">ifelse</span>(nutriSample$AceiteTipo ==<span class="st"> </span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>),
+                  <span class="dt">Vegetables =</span> P41rac +<span class="st"> </span>P42rac,
+                  <span class="dt">Fruit =</span> P50rac +<span class="st"> </span>P52rac,
+                  <span class="dt">RedMeat =</span> P29rac +<span class="st"> </span>P31rac,
+                  <span class="dt">Butter =</span> P79rac,
+                  <span class="dt">SoftDrinks =</span> P89rac +<span class="st"> </span>P90rac,
+                  <span class="dt">Wine =</span> P96rac,
+                  <span class="dt">Legumes =</span> P46rac,
+                  <span class="dt">Fish =</span> P35rac +<span class="st"> </span>P36rac +<span class="st"> </span>P37rac +<span class="st"> </span>P38rac,
+                  <span class="dt">Pastries =</span> P69rac +<span class="st"> </span>P70rac +<span class="st"> </span>P71rac +<span class="st"> </span>P72rac +<span class="st"> </span>P73rac,
+                  <span class="dt">Nuts =</span> P53rac,
+                  <span class="dt">WhiteMeat =</span> <span class="kw">ifelse</span>(nutriSample$P30rac &gt;<span class="st"> </span>nutriSample$P29rac, <span class="dv">1</span>, <span class="dv">0</span>),
+                  <span class="dt">Sofritos =</span> <span class="kw">rep</span>(<span class="dv">0</span>, <span class="kw">nrow</span>(data)), <span class="co"># data lacks this variable, </span>
+                                                 <span class="co"># so we go on without it</span>
+                  <span class="dt">output =</span> <span class="st">&quot;percent&quot;</span>, <span class="dt">rm.na =</span> <span class="ot">FALSE</span>, <span class="dt">frequency =</span> <span class="st">&quot;daily&quot;</span>)</code></pre></div>
+<p>Our data lacks one item of this score, which is ‘sofrito’ consumption. Sofritos are a slow cooked sauce, usually with onion and garlic or other vegetables <a href="#fn23" class="footnoteRef" id="fnref23"><sup>23</sup></a>.</p>
+<p>Predimed score gives more weight to olive oil consumption than to other foods, as olive oil is scored more than once: it is asked if olive oil is principal (yes or no), the amount of olive oil consumed, and sofrito consumption, which is very rich in olive oil.</p>
+</div>
+<div id="mai" class="section level3">
+<h3>MAI</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MAI &lt;-<span class="st"> </span><span class="kw">computeMAI99</span>(<span class="dt">data =</span> nutriSample,
+  <span class="dt">Bread =</span> P55Kcal +<span class="st"> </span>P56Kcal +<span class="st"> </span>P57Kcal,
+  <span class="dt">Cereals =</span> P55Kcal +<span class="st"> </span>P56Kcal +<span class="st"> </span>P57Kcal +<span class="st"> </span>P59Kcal +<span class="st"> </span>P60Kcal +<span class="st"> </span>P61Kcal +<span class="st"> </span>P62Kcal,
+  <span class="dt">Legumes =</span> P46Kcal,
+  <span class="dt">Potatoes =</span> P43Kcal +<span class="st"> </span>P44Kcal +<span class="st"> </span>P46Kcal,
+  <span class="dt">Vegetables =</span> P41Kcal +<span class="st"> </span>P42Kcal,
+  <span class="dt">FruitAndNuts =</span> P50Kcal +<span class="st"> </span>P53Kcal +<span class="st"> </span>P53Kcal,
+  <span class="dt">Fish =</span> P35Kcal +<span class="st"> </span>P36Kcal +<span class="st"> </span>P37Kcal +<span class="st"> </span>P38Kcal,
+  <span class="dt">Wine =</span> P96Kcal,
+  <span class="dt">Oil =</span> AceiteKcal,
+  <span class="dt">Milk =</span> P19Kcal +<span class="st"> </span>P20Kcal +<span class="st"> </span>P21Kcal,
+  <span class="dt">Cheese =</span> P26Kcal +<span class="st"> </span>P27Kcal,
+  <span class="dt">Meat =</span> P29Kcal +<span class="st"> </span>P30Kcal +<span class="st"> </span>P31Kcal +<span class="st"> </span>P32Kcal,
+  <span class="dt">Eggs =</span> P28Kcal,
+  <span class="dt">AnimalFats =</span> P29grGrasa +<span class="st"> </span>P30grGrasa +<span class="st"> </span>P31grGrasa +<span class="st"> </span>
+<span class="st">    </span>P32grGrasa +<span class="st"> </span>P33grGrasa +<span class="st"> </span>P34grGrasa ,
+  <span class="dt">SoftDrinks =</span> P89Kcal +<span class="st"> </span>P90Kcal,
+  <span class="dt">Pastries =</span> P69Kcal +<span class="st"> </span>P70Kcal +<span class="st"> </span>P71Kcal +<span class="st"> </span>P72Kcal +<span class="st"> </span>P73Kcal,
+  <span class="dt">Sugar =</span> P84Kcal,
+  <span class="dt">Kcal =</span> totalKcal,
+  <span class="dt">output =</span> <span class="st">&quot;index&quot;</span>, <span class="dt">rm.na =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<p>This score is different, as it has not the same schema, and we have not coerced it as percentage.</p>
+</div>
+<div id="mdqi" class="section level3">
+<h3>MDQI</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MDQI &lt;-<span class="st"> </span><span class="kw">computeMDQI</span>(<span class="dt">data =</span> nutriSample,
+                      <span class="dt">FruitAndVegetables =</span> P50grCom +<span class="st"> </span>P52grCom +<span class="st"> </span>P41grCom +<span class="st"> </span>P42grCom,
+                      <span class="dt">OliveOil =</span> Aceitegr,
+                      <span class="dt">OOmeasure =</span> <span class="st">&quot;gr&quot;</span>,
+                      <span class="dt">Fish =</span> P35grCom +<span class="st"> </span>P36grCom +<span class="st"> </span>P37grCom +<span class="st"> </span>P38grCom,
+                      <span class="dt">Cereals =</span> P55grCom +<span class="st"> </span>P56grCom +<span class="st"> </span>P57grCom +<span class="st"> </span>P59grCom +<span class="st"> </span>
+<span class="st">                        </span>P60grCom +<span class="st"> </span>P61grCom +<span class="st"> </span>P62grCom,
+                      <span class="dt">Meat =</span> P29grCom +<span class="st"> </span>P30grCom +<span class="st"> </span>P31grCom +<span class="st"> </span>P32grCom,
+                      <span class="dt">SatFats =</span> totalGrasaSat,
+                      <span class="dt">Cholesterol =</span> totalCol,
+                      <span class="dt">Kcal =</span> totalKcal,
+                      <span class="dt">invert =</span> <span class="ot">TRUE</span>,
+                      <span class="dt">frequency =</span> <span class="st">&quot;daily&quot;</span>, <span class="dt">output =</span> <span class="st">&quot;percent&quot;</span>, <span class="dt">rm.na =</span> <span class="ot">FALSE</span>)</code></pre></div>
+</div>
+<div id="cardio" class="section level3">
+<h3>Cardio</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Cardio &lt;-<span class="st"> </span><span class="kw">computeCardio</span>(<span class="dt">data =</span> nutriSample,
+                          <span class="dt">OliveOil =</span> Aceitegr,
+                          <span class="dt">OOmeasure =</span> <span class="st">&quot;gr&quot;</span>,
+                          <span class="dt">Fruit =</span> P50rac +<span class="st"> </span>P52rac,
+                          <span class="dt">Vegetables =</span> P41rac +<span class="st"> </span>P42rac,
+                          <span class="dt">Legumes =</span> P46rac,
+                          <span class="dt">Fish =</span> P35rac +<span class="st"> </span>P36rac +<span class="st"> </span>P37rac +<span class="st"> </span>P38rac,
+                          <span class="dt">Wine =</span> P96rac,
+                          <span class="dt">Meat =</span> P29rac +<span class="st"> </span>P30rac +<span class="st"> </span>P31rac +<span class="st"> </span>P32rac,
+                          <span class="dt">RefinedBread =</span> P55rac,
+                          <span class="dt">RefinedRice =</span> P61rac,
+                          <span class="dt">WholeBread =</span> P56rac,
+                          <span class="dt">frequency =</span> <span class="st">&quot;daily&quot;</span>, <span class="dt">output =</span> <span class="st">&quot;percent&quot;</span>, <span class="dt">rm.na =</span> <span class="ot">FALSE</span>)</code></pre></div>
+</div>
+<div id="mdp02" class="section level3">
+<h3>MDP02</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MDP02 &lt;-<span class="st"> </span><span class="kw">computeMDP02</span>(<span class="dt">data =</span> nutriSample,
+                        <span class="dt">OliveOil =</span> Aceitegr,
+                        <span class="dt">OOmeasure =</span> <span class="st">&quot;gr&quot;</span>,
+                        <span class="dt">Fiber =</span> totalFibra,
+                        <span class="dt">Fruit =</span> P50grCom,
+                        <span class="dt">Vegetables =</span> P41grCom +<span class="st"> </span>P42grCom,
+                        <span class="dt">Fish =</span> P35grCom +<span class="st"> </span>P36grCom +<span class="st"> </span>P37grCom +<span class="st"> </span>P38grCom,
+                        <span class="dt">Alcohol =</span> <span class="dv">12</span> *<span class="st"> </span>(P94rac +<span class="st"> </span>P96rac +<span class="st"> </span>P97rac +<span class="st"> </span>P98rac +<span class="st"> </span>P99rac),
+                        <span class="dt">Meat =</span> P29grCom +<span class="st"> </span>P30grCom +<span class="st"> </span>P31grCom +<span class="st"> </span>P32grCom,
+                        <span class="dt">RefinedCereals =</span> P55grCom +<span class="st"> </span>P61grCom,
+                        <span class="dt">output =</span> <span class="st">&quot;percent&quot;</span>, <span class="dt">rm.na =</span> <span class="ot">FALSE</span>, <span class="dt">frequency =</span> <span class="st">&quot;daily&quot;</span>)</code></pre></div>
+</div>
+<div id="rmed" class="section level3">
+<h3>RMed</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">RMed &lt;-<span class="st"> </span><span class="kw">computeRMED</span>(<span class="dt">data =</span> nutriSample,
+                      <span class="dt">Kcal =</span> totalKcal,
+                      <span class="dt">FruitAndNuts =</span> P50grCom +<span class="st"> </span>P52grCom,
+                      <span class="dt">Vegetables =</span> P41grCom +<span class="st"> </span>P42grCom,
+                      <span class="dt">Legumes =</span> P46grCom,
+                      <span class="dt">Cereals =</span> P55grCom +<span class="st"> </span>P56grCom +<span class="st"> </span>P57grCom +<span class="st"> </span>P59grCom +<span class="st"> </span>
+<span class="st">                        </span>P60grCom +<span class="st"> </span>P61grCom +<span class="st"> </span>P62grCom,
+                      <span class="dt">Fish =</span> P35grCom +<span class="st"> </span>P36grCom +<span class="st"> </span>P37grCom +<span class="st"> </span>P38grCom,
+                      <span class="dt">OliveOil =</span> Aceitegr,
+                      <span class="dt">Meat =</span> P29grCom +<span class="st"> </span>P30grCom +<span class="st"> </span>P31grCom +<span class="st"> </span>P32grCom,
+                      <span class="dt">Dairy=</span> P19grCom +<span class="st"> </span>P20grCom +<span class="st"> </span>P20grCom +<span class="st"> </span>P22grCom +<span class="st"> </span>P23grCom +<span class="st"> </span>
+<span class="st">                        </span>P24grCom +<span class="st"> </span>P25grCom +<span class="st"> </span>P26grCom +<span class="st"> </span>P27grCom,
+                      <span class="dt">Alcohol =</span> <span class="dv">12</span> *<span class="st"> </span>(P94rac +<span class="st"> </span>P96rac +<span class="st"> </span>P97rac +<span class="st"> </span>P98rac +<span class="st"> </span>P99rac),
+                      <span class="dt">Sex =</span> SEXO, <span class="dt">men =</span> <span class="st">&quot;Hombre&quot;</span>, <span class="dt">women =</span> <span class="st">&quot;Mujer&quot;</span>,
+                      <span class="dt">frequency =</span> <span class="st">&quot;daily&quot;</span>, <span class="dt">output =</span> <span class="st">&quot;percent&quot;</span>, <span class="dt">rm.na =</span> <span class="ot">FALSE</span>)</code></pre></div>
+</div>
+<div id="sofi" class="section level3">
+<h3>Sofi</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># kind of Olive Oil consumded is stored in a different way than asked by formula:</span>
+  <span class="co"># data has: 1 = olive oil, 2 = seeds oil, 3 = both, </span>
+  <span class="co"># formula wants use of olive oil: 0 = occasional use, 1 = frequent use, 2 = regular use</span>
+  <span class="co"># so we first change it:</span>
+Oil &lt;-<span class="st"> </span><span class="kw">ifelse</span>(nutriSample$AceiteTipo ==<span class="st"> </span><span class="dv">2</span>, <span class="dv">0</span>, 
+              <span class="kw">ifelse</span>(nutriSample$AceiteTipo ==<span class="st"> </span><span class="dv">3</span>, <span class="dv">1</span>, 
+                     <span class="kw">ifelse</span>(nutriSample$AceiteTipo ==<span class="st"> </span><span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>)))
+
+Sofi &lt;-<span class="st"> </span><span class="kw">computeSofi</span>(<span class="dt">data =</span> nutriSample,
+              <span class="dt">Fruit =</span> P50rac +<span class="st"> </span>P52rac,
+              <span class="dt">Vegetables =</span> P41rac +<span class="st">  </span>P42rac,
+              <span class="dt">Legumes =</span> P46rac,
+              <span class="dt">Cereals =</span> P55rac +<span class="st"> </span>P56rac +<span class="st"> </span>P57rac +<span class="st"> </span>P59rac +<span class="st"> </span>P60rac +<span class="st"> </span>P61rac +<span class="st"> </span>P62rac,
+              <span class="dt">Fish =</span> P35rac +<span class="st"> </span>P36rac +<span class="st"> </span>P37rac +<span class="st"> </span>P38rac,
+              <span class="dt">Meat =</span> P29rac +<span class="st"> </span>P30rac +<span class="st"> </span>P31rac +<span class="st"> </span>P32rac,
+              <span class="dt">Dairy =</span> P19rac +<span class="st"> </span>P20rac +<span class="st"> </span>P20rac +<span class="st"> </span>P22rac +<span class="st"> </span>P23rac +<span class="st"> </span>
+<span class="st">                </span>P24rac +<span class="st"> </span>P25rac +<span class="st"> </span>P26rac +<span class="st"> </span>P27rac,
+              <span class="dt">Alcohol =</span> P94rac +<span class="st"> </span>P96rac +<span class="st"> </span>P97rac +<span class="st"> </span>P98rac +<span class="st"> </span>P99rac,
+              <span class="dt">OliveOil =</span> Oil,
+              <span class="dt">output =</span> <span class="st">&quot;percent&quot;</span>, <span class="dt">rm.na =</span> <span class="ot">FALSE</span>, <span class="dt">frequency =</span> <span class="st">&quot;daily&quot;</span>)
+<span class="kw">rm</span>(Oil)</code></pre></div>
+</div>
+<div id="goulet" class="section level3">
+<h3>Goulet</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Goulet &lt;-<span class="st"> </span><span class="kw">computeGoulet</span>(<span class="dt">data =</span> nutriSample,
+  <span class="dt">WholeCereals =</span> P56rac +<span class="st"> </span><span class="kw">ifelse</span>(nutriSample$P63_2 ==<span class="st"> </span><span class="dv">2</span>, nutriSample$P61rac, <span class="dv">0</span>),
+  <span class="dt">Vegetables =</span> P41rac +<span class="st"> </span>P42rac,
+  <span class="dt">Fruit =</span> P50rac +<span class="st"> </span>P52rac,
+  <span class="dt">LegumesAndNuts =</span> P46rac +<span class="st"> </span>P53rac +<span class="st"> </span>P75rac,
+  <span class="dt">OliveOil =</span> Aceitegr,
+  <span class="dt">OOmeasure =</span> <span class="st">&quot;gr&quot;</span>,
+  <span class="dt">Olives =</span> P54rac,
+  <span class="dt">Dairy =</span> P19rac +<span class="st"> </span>P20rac +<span class="st"> </span>P20rac +<span class="st"> </span>P22rac +<span class="st"> </span>P23rac +<span class="st"> </span>P24rac +<span class="st"> </span>P25rac +<span class="st"> </span>P26rac +<span class="st"> </span>P27rac,
+  <span class="dt">Fish =</span> P35rac +<span class="st"> </span>P36rac +<span class="st"> </span>P37rac +<span class="st"> </span>P38rac,
+  <span class="dt">Poultry =</span> P33rac,
+  <span class="dt">Eggs =</span> P28rac,
+  <span class="dt">Sweets =</span> P69rac +<span class="st"> </span>P70rac +<span class="st"> </span>P71rac +<span class="st"> </span>P72rac +<span class="st"> </span>P73rac,
+  <span class="dt">Meat =</span> P29rac +<span class="st"> </span>P30rac +<span class="st"> </span>P31rac +<span class="st"> </span>P32rac,
+  <span class="dt">output =</span> <span class="st">&quot;percent&quot;</span>, <span class="dt">frequency =</span> <span class="st">&quot;daily&quot;</span>, <span class="dt">rm.na =</span> <span class="ot">FALSE</span>)</code></pre></div>
+</div>
+<div id="msdps" class="section level3">
+<h3>MSDPS</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># kind of Olive Oil consumded is stored in a different way than asked by formula:</span>
+  <span class="co"># data has: 1 = olive oil, 2 = seeds oil, 3 = both, </span>
+  <span class="co"># formula wants: </span>
+    <span class="co"># 0 = olive oil is not usually consumed. </span>
+    <span class="co"># 1 = olive oil and other vegetable oils are usually consumed. </span>
+    <span class="co"># 2 = only olive oil is usually consumed</span>
+  <span class="co"># so we first change it:</span>
+Oil &lt;-<span class="st"> </span><span class="kw">ifelse</span>(nutriSample$AceiteTipo ==<span class="st"> </span><span class="dv">2</span>, <span class="dv">0</span>, 
+              <span class="kw">ifelse</span>(nutriSample$AceiteTipo ==<span class="st"> </span><span class="dv">3</span>, <span class="dv">1</span>, 
+                     <span class="kw">ifelse</span>(nutriSample$AceiteTipo ==<span class="st"> </span><span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>)))
+
+MSDPS &lt;-<span class="st"> </span><span class="kw">computeMSDPS</span>(<span class="dt">data =</span> nutriSample,
+        <span class="co"># group of arguments about food consumption:</span>
+           <span class="dt">WholeCereals =</span> P56rac +<span class="st"> </span><span class="kw">ifelse</span>(nutriSample$P63_2 ==<span class="st"> </span><span class="dv">2</span>, nutriSample$P61rac, <span class="dv">0</span>),
+           <span class="dt">Fruit =</span> P50rac +<span class="st"> </span>P52rac,
+           <span class="dt">Vegetables =</span> P41rac +<span class="st"> </span>P42rac,
+           <span class="dt">Dairy =</span> P19rac +<span class="st"> </span>P20rac +<span class="st"> </span>P20rac +<span class="st"> </span>P22rac +<span class="st"> </span>P23rac +<span class="st"> </span>
+<span class="st">             </span>P24rac +<span class="st"> </span>P25rac +<span class="st"> </span>P26rac +<span class="st"> </span>P27rac,
+           <span class="dt">Wine =</span> P96rac,
+           <span class="dt">Fish =</span> P35rac +<span class="st"> </span>P36rac +<span class="st"> </span>P37rac +<span class="st"> </span>P38rac,
+           <span class="dt">Poultry =</span> P33rac,
+           <span class="dt">LegumesAndMore =</span> P46rac +<span class="st"> </span>P53rac +<span class="st"> </span>P54rac,
+           <span class="dt">Potatoes =</span> P43grCom +<span class="st">  </span>P44grCom +<span class="st">  </span>P45grCom,
+           <span class="dt">Eggs =</span> P28rac,
+           <span class="dt">Sweets =</span> P69rac +<span class="st"> </span>P70rac +<span class="st"> </span>P71rac +<span class="st"> </span>P72rac +<span class="st"> </span>P73rac,
+           <span class="dt">Meat =</span> P29rac +<span class="st"> </span>P30rac +<span class="st"> </span>P31rac +<span class="st"> </span>P32rac,
+           <span class="dt">OOprincipal =</span> Oil,
+            
+        <span class="co"># group of arguments about energy intake to compute correction factor:</span>
+           <span class="dt">WholeCerealsK =</span> P56Kcal +<span class="st"> </span><span class="kw">ifelse</span>(nutriSample$P63_2 ==<span class="st"> </span><span class="dv">2</span>, nutriSample$P61Kcal, <span class="dv">0</span>),
+           <span class="dt">FruitK =</span> P50Kcal +<span class="st"> </span>P52Kcal,
+           <span class="dt">VegetablesK =</span> P41Kcal +<span class="st"> </span>P42Kcal,
+           <span class="dt">DairyK =</span> P19Kcal +<span class="st"> </span>P20Kcal +<span class="st"> </span>P21Kcal +<span class="st"> </span>P22Kcal +<span class="st"> </span>P23Kcal +<span class="st"> </span>
+<span class="st">             </span>P24Kcal +<span class="st"> </span>P25Kcal +<span class="st"> </span>P26Kcal +<span class="st"> </span>P27Kcal,
+           <span class="dt">WineK =</span> P96Kcal,
+           <span class="dt">FishK =</span> P35Kcal +<span class="st"> </span>P36Kcal +<span class="st"> </span>P37Kcal +<span class="st"> </span>P38Kcal,
+           <span class="dt">PoultryK =</span> P33Kcal,
+           <span class="dt">LegumesAndMoreK =</span> P46Kcal +<span class="st"> </span>P53Kcal +<span class="st"> </span>P54Kcal,
+           <span class="dt">PotatoesK =</span> P43grCom +<span class="st">  </span>P44grCom +<span class="st">  </span>P45grCom,
+           <span class="dt">EggsK =</span> P28Kcal,
+           <span class="dt">SweetsK =</span> P69Kcal +<span class="st"> </span>P70Kcal +<span class="st"> </span>P71Kcal +<span class="st"> </span>P72Kcal +<span class="st"> </span>P73Kcal,
+           <span class="dt">MeatK =</span> P29Kcal +<span class="st"> </span>P30Kcal +<span class="st"> </span>P31Kcal +<span class="st"> </span>P32Kcal,
+           <span class="dt">OliveOilK =</span> AceiteKcal,
+           <span class="dt">Kcal =</span> totalKcal,
+         
+        <span class="co"># final arguments:</span>
+           <span class="dt">Sex =</span> SEXO, <span class="dt">men =</span> <span class="st">&quot;Hombre&quot;</span>, <span class="dt">women =</span> <span class="st">&quot;Mujer&quot;</span>,
+           <span class="dt">output =</span> <span class="st">&quot;percent&quot;</span>, <span class="dt">frequency =</span> <span class="st">&quot;daily&quot;</span>, <span class="dt">rm.na =</span> <span class="ot">FALSE</span>)</code></pre></div>
+</div>
+<div id="we-store-them-together" class="section level3">
+<h3>We store them together</h3>
+<p>We store all computed scores in the same data frame</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scores &lt;-<span class="st"> </span><span class="kw">data.frame</span>(MDS05, MDS12, Pitsavos, Predimed, MDQI, Cardio, 
+                     MDP02, RMed, Sofi, Goulet, MSDPS, MAI)
+
+knitr::<span class="kw">kable</span>(<span class="kw">head</span>(scores))</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">MDS05</th>
+<th align="right">MDS12</th>
+<th align="right">Pitsavos</th>
+<th align="right">Predimed</th>
+<th align="right">MDQI</th>
+<th align="right">Cardio</th>
+<th align="right">MDP02</th>
+<th align="right">RMed</th>
+<th align="right">Sofi</th>
+<th align="right">Goulet</th>
+<th align="right">MSDPS</th>
+<th align="right">MAI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">33.3</td>
+<td align="right">50.0</td>
+<td align="right">65.5</td>
+<td align="right">42.9</td>
+<td align="right">57.1</td>
+<td align="right">66.7</td>
+<td align="right">55.0</td>
+<td align="right">55.6</td>
+<td align="right">50.0</td>
+<td align="right">47.7</td>
+<td align="right">30.2</td>
+<td align="right">2.24</td>
+</tr>
+<tr class="even">
+<td align="right">55.6</td>
+<td align="right">66.7</td>
+<td align="right">78.2</td>
+<td align="right">50.0</td>
+<td align="right">64.3</td>
+<td align="right">77.8</td>
+<td align="right">57.5</td>
+<td align="right">50.0</td>
+<td align="right">72.2</td>
+<td align="right">70.5</td>
+<td align="right">33.3</td>
+<td align="right">10.59</td>
+</tr>
+<tr class="odd">
+<td align="right">44.4</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">88.9</td>
+<td align="right">55.6</td>
+<td align="right">63.6</td>
+<td align="right">50.0</td>
+<td align="right">50.0</td>
+<td align="right">55.6</td>
+<td align="right">62.5</td>
+<td align="right">38.9</td>
+<td align="right">44.4</td>
+<td align="right">40.9</td>
+<td align="right">22.3</td>
+<td align="right">2.43</td>
+</tr>
+<tr class="odd">
+<td align="right">66.7</td>
+<td align="right">50.0</td>
+<td align="right">67.3</td>
+<td align="right">71.4</td>
+<td align="right">78.6</td>
+<td align="right">66.7</td>
+<td align="right">82.5</td>
+<td align="right">83.3</td>
+<td align="right">83.3</td>
+<td align="right">70.5</td>
+<td align="right">28.8</td>
+<td align="right">5.27</td>
+</tr>
+<tr class="even">
+<td align="right">11.1</td>
+<td align="right">44.4</td>
+<td align="right">61.8</td>
+<td align="right">50.0</td>
+<td align="right">71.4</td>
+<td align="right">55.6</td>
+<td align="right">75.0</td>
+<td align="right">44.4</td>
+<td align="right">61.1</td>
+<td align="right">61.4</td>
+<td align="right">24.7</td>
+<td align="right">2.81</td>
+</tr>
+</tbody>
+</table>
+<p>We have not incluided MAI score, as it has not a percentage.</p>
+</div>
+</div>
+<div id="do-they-correlate" class="section level2">
+<h2>Do they correlate?</h2>
+<p>As we said above, it has been pointed out that different scores do not correlate as it could be desirable.</p>
+<p>Here we are doing a correlation matrix of the scores in our sample:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(<span class="kw">round</span>(<span class="kw">cor</span>(scores, <span class="dt">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>), <span class="dv">2</span>))</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">MDS05</th>
+<th align="right">MDS12</th>
+<th align="right">Pitsavos</th>
+<th align="right">Predimed</th>
+<th align="right">MDQI</th>
+<th align="right">Cardio</th>
+<th align="right">MDP02</th>
+<th align="right">RMed</th>
+<th align="right">Sofi</th>
+<th align="right">Goulet</th>
+<th align="right">MSDPS</th>
+<th align="right">MAI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>MDS05</td>
+<td align="right">1.00</td>
+<td align="right">0.32</td>
+<td align="right">-0.12</td>
+<td align="right">0.11</td>
+<td align="right">0.04</td>
+<td align="right">0.09</td>
+<td align="right">0.06</td>
+<td align="right">0.07</td>
+<td align="right">0.05</td>
+<td align="right">0.10</td>
+<td align="right">0.08</td>
+<td align="right">0.03</td>
+</tr>
+<tr class="even">
+<td>MDS12</td>
+<td align="right">0.32</td>
+<td align="right">1.00</td>
+<td align="right">0.04</td>
+<td align="right">0.21</td>
+<td align="right">0.12</td>
+<td align="right">0.17</td>
+<td align="right">0.19</td>
+<td align="right">0.16</td>
+<td align="right">0.19</td>
+<td align="right">0.09</td>
+<td align="right">0.19</td>
+<td align="right">0.01</td>
+</tr>
+<tr class="odd">
+<td>Pitsavos</td>
+<td align="right">-0.12</td>
+<td align="right">0.04</td>
+<td align="right">1.00</td>
+<td align="right">0.29</td>
+<td align="right">0.36</td>
+<td align="right">0.51</td>
+<td align="right">0.56</td>
+<td align="right">0.45</td>
+<td align="right">0.48</td>
+<td align="right">0.39</td>
+<td align="right">0.24</td>
+<td align="right">0.49</td>
+</tr>
+<tr class="even">
+<td>Predimed</td>
+<td align="right">0.11</td>
+<td align="right">0.21</td>
+<td align="right">0.29</td>
+<td align="right">1.00</td>
+<td align="right">0.55</td>
+<td align="right">0.50</td>
+<td align="right">0.59</td>
+<td align="right">0.59</td>
+<td align="right">0.60</td>
+<td align="right">0.56</td>
+<td align="right">0.34</td>
+<td align="right">0.45</td>
+</tr>
+<tr class="odd">
+<td>MDQI</td>
+<td align="right">0.04</td>
+<td align="right">0.12</td>
+<td align="right">0.36</td>
+<td align="right">0.55</td>
+<td align="right">1.00</td>
+<td align="right">0.35</td>
+<td align="right">0.51</td>
+<td align="right">0.59</td>
+<td align="right">0.58</td>
+<td align="right">0.66</td>
+<td align="right">0.35</td>
+<td align="right">0.44</td>
+</tr>
+<tr class="even">
+<td>Cardio</td>
+<td align="right">0.09</td>
+<td align="right">0.17</td>
+<td align="right">0.51</td>
+<td align="right">0.50</td>
+<td align="right">0.35</td>
+<td align="right">1.00</td>
+<td align="right">0.75</td>
+<td align="right">0.57</td>
+<td align="right">0.56</td>
+<td align="right">0.46</td>
+<td align="right">0.45</td>
+<td align="right">0.39</td>
+</tr>
+<tr class="odd">
+<td>MDP02</td>
+<td align="right">0.06</td>
+<td align="right">0.19</td>
+<td align="right">0.56</td>
+<td align="right">0.59</td>
+<td align="right">0.51</td>
+<td align="right">0.75</td>
+<td align="right">1.00</td>
+<td align="right">0.64</td>
+<td align="right">0.66</td>
+<td align="right">0.55</td>
+<td align="right">0.35</td>
+<td align="right">0.45</td>
+</tr>
+<tr class="even">
+<td>RMed</td>
+<td align="right">0.07</td>
+<td align="right">0.16</td>
+<td align="right">0.45</td>
+<td align="right">0.59</td>
+<td align="right">0.59</td>
+<td align="right">0.57</td>
+<td align="right">0.64</td>
+<td align="right">1.00</td>
+<td align="right">0.67</td>
+<td align="right">0.56</td>
+<td align="right">0.49</td>
+<td align="right">0.55</td>
+</tr>
+<tr class="odd">
+<td>Sofi</td>
+<td align="right">0.05</td>
+<td align="right">0.19</td>
+<td align="right">0.48</td>
+<td align="right">0.60</td>
+<td align="right">0.58</td>
+<td align="right">0.56</td>
+<td align="right">0.66</td>
+<td align="right">0.67</td>
+<td align="right">1.00</td>
+<td align="right">0.47</td>
+<td align="right">0.40</td>
+<td align="right">0.45</td>
+</tr>
+<tr class="even">
+<td>Goulet</td>
+<td align="right">0.10</td>
+<td align="right">0.09</td>
+<td align="right">0.39</td>
+<td align="right">0.56</td>
+<td align="right">0.66</td>
+<td align="right">0.46</td>
+<td align="right">0.55</td>
+<td align="right">0.56</td>
+<td align="right">0.47</td>
+<td align="right">1.00</td>
+<td align="right">0.46</td>
+<td align="right">0.54</td>
+</tr>
+<tr class="odd">
+<td>MSDPS</td>
+<td align="right">0.08</td>
+<td align="right">0.19</td>
+<td align="right">0.24</td>
+<td align="right">0.34</td>
+<td align="right">0.35</td>
+<td align="right">0.45</td>
+<td align="right">0.35</td>
+<td align="right">0.49</td>
+<td align="right">0.40</td>
+<td align="right">0.46</td>
+<td align="right">1.00</td>
+<td align="right">0.08</td>
+</tr>
+<tr class="even">
+<td>MAI</td>
+<td align="right">0.03</td>
+<td align="right">0.01</td>
+<td align="right">0.49</td>
+<td align="right">0.45</td>
+<td align="right">0.44</td>
+<td align="right">0.39</td>
+<td align="right">0.45</td>
+<td align="right">0.55</td>
+<td align="right">0.45</td>
+<td align="right">0.54</td>
+<td align="right">0.08</td>
+<td align="right">1.00</td>
+</tr>
+</tbody>
+</table>
+<p>Correlations are not as high as expected.</p>
+<p>Know, we are plotting histograms of the different scores, all measured as percentage.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">for(i in <span class="dv">1</span>:<span class="kw">ncol</span>(scores)){
+  <span class="kw">hist</span>(scores[ ,i], <span class="dt">main=</span><span class="st">&quot;&quot;</span>, <span class="dt">xlab=</span><span class="kw">names</span>(scores)[i], <span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">100</span>))
+}</code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --><img src="data:image/png;base64,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" /><!-- --><img src="data:image/png;base64,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" /><!-- --><img src="data:image/png;base64,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" /><!-- --><img src="data:image/png;base64,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" /><!-- --><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAMAAAAjXV6yAAAC61BMVEUAAAABAQECAgIDAwMEBAQFBQUGBgYHBwcICAgJCQkKCgoLCwsMDAwNDQ0ODg4PDw8QEBARERESEhITExMUFBQVFRUWFhYXFxcYGBgZGRkaGhobGxscHBwdHR0eHh4fHx8gICAhISEiIiIjIyMkJCQlJSUmJiYnJycoKCgpKSkqKiorKyssLCwtLS0uLi4vLy8wMDAxMTEyMjIzMzM0NDQ1NTU2NjY3Nzc4ODg5OTk6Ojo7Ozs8PDw9PT0+Pj4/Pz9AQEBBQUFCQkJDQ0NERERFRUVGRkZHR0dISEhJSUlKSkpLS0tMTExNTU1OTk5PT09QUFBSUlJTU1NUVFRVVVVWVlZYWFhZWVlaWlpbW1tcXFxdXV1eXl5fX19gYGBhYWFiYmJjY2NkZGRlZWVmZmZnZ2doaGhpaWlqampra2tsbGxtbW1ubm5vb29wcHBxcXFycnJzc3N0dHR1dXV2dnZ3d3d4eHh5eXl6enp7e3t8fHx9fX1+fn5/f3+AgICBgYGCgoKDg4OEhISFhYWGhoaHh4eIiIiJiYmKioqLi4uMjIyNjY2Ojo6Pj4+QkJCRkZGSkpKTk5OUlJSVlZWWlpaXl5eYmJiZmZmampqbm5ucnJydnZ2enp6fn5+goKChoaGioqKjo6OkpKSlpaWmpqanp6eoqKipqamqqqqrq6usrKytra2urq6vr6+wsLCxsbGysrKzs7O0tLS1tbW2tra3t7e4uLi5ubm6urq7u7u8vLy9vb2+vr6/v7/BwcHCwsLDw8PExMTFxcXGxsbHx8fIyMjJycnKysrLy8vMzMzNzc3Ozs7Pz8/Q0NDR0dHT09PU1NTW1tbX19fY2NjZ2dna2trb29vc3Nzd3d3e3t7g4ODi4uLj4+Pk5OTl5eXm5ubn5+fo6Ojp6enq6urr6+vs7Ozt7e3u7u7v7+/w8PDx8fHy8vLz8/P09PT19fX29vb39/f4+Pj5+fn6+vr7+/v8/Pz9/f3+/v7////y/GCvAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAMAElEQVR4nO2deVwU5xmAvwXFwAIr4gEeQZF6NKhNPCsmAtqk8aqx1gRjDUQsXiFSolUk8UgBUQu2HoiWIKIIiVGDpmJbEjV36lFtoqJSTYOIF3Is7PzZmVkOZ38z37vH7Ozs8D5/zO7H+8473+9hjt2Zb2YJg1Ahru6A2kFBACgIAAUBoCAAFASAggBQEAAKAkBBACgIAAUBoCAAFASAggBQEAAKAkBBACgIAAUBoCAAFASAggBQEAAKAkBBACgIAAUBoCAAFASAggBQEAAKAkBBACgIAAUBoCAAFASAggBQEAAKAkBBACgIAAUBoCAAFASAggBQEAAKAkBBACgIAAUBoCAAFASAggBQEAAKAkBBACgIAAUBoCAAFASAggBQEAAKAkBBACgIAAUBoCAAFASAggBQEAAKAkBBACgIAAUBoCAAFASAggBQEAAKAnBDQfmzhSx16tLcUNCcxOLHKfJ06tLcUdABQbMJBVnghoL+1bY/GH5Ojnp03FDQ3ZLWHcLgU3LUo+OGgtoZ97m89cRAQQAoCAAFAaAgABQEgIIAUBAACgJwkaA/XpajnIYFGcgz6VesmMF0r9okHdWwoIaPX+9BRmZcpWZfXhHWhRCv0LekVGpYELeo8qV9yaiNFZLJX/n3js/am5+9KMTwrXiGtgUxN3fP0OkM5KUbEsmREx+Y39T/Klo8Q8OCTN+uHUWemL77B+OxwZMkkv13t777yCCeoWFBwaTHa4dr+bdZgRLJo2Na989vjhHP0LCgt043tb6tvi6RXKyblHvm4qXP/jrNo0Q8Q8OCmFt77jCVGVJuzJRGEZ6oUokEDQv6IsCzkqnoYfiKnn/7fFnZudsWf/w0tJUnjjihjxa4SNCzE66x07oXI+F5Gj+sEv7BeLWVp7W7BumL+JdiP3ieGlIuFdLwJhaWyb9kDKQkx5iZTSbHxIhnaFhQiu/+BsZY4pdMSY4mvhEsY0l4RIR4hiyCIkKFLBeGXSTIGKfTdfckv6mnJDdv951X7fxNzP/81cfJnS4Mu+yrxvf70vIuAOkVUUFHnC/onqB5VC2CrKJ5m37ulQ4pqHrRmJE80BwVUQHKCsrsHCDAK0UQVkrQrC7zV/CAszTvSZI8s+YMQSk97wjoKxwxpZQgv7/IUc4pgnoJw0+6RtCQ43KU07CgjTObaHlWomFBBeOHJm/MZHGonIYFhbTiUDkNC5IHbQtqvFZLueRlFVoWVBDmQc6+tt4xRRoWVEjmHCFnd3pkOVROw4Kemsc2zjLJQxwqp2FB3kW8oIPedhT5pwdpweOwDH2yTVAjsWCxDF1op03Qz5bxgtYMd6icC9agBosDcf48GbrQTlv1XN2Kf5MTe3yyHSqnYUGmTQZ29fRJdbujmFKCGOb+FyVnahwsp2lBcqBhQS+04lA5DQuKY4md4j9svUPlNCzIzJ2xexwqp3lBzKERDpXTvqACvUPlNCwojyejh8TgwzYUGAasTkF6Hv9I6nhyZYYBq1OQNSg0DNh9BSk0DFidggIfRyJZoWHA6hR0pGe/pC3JId227mCRSFZoGLA6BcVH1LHT+ogllGSFhgGrU1Dwe/xLXl9atjLDgNUpqJ/5S9i6YHq+6DDg+m9aGfaZDH1Sp6AlPiXNTHOJ93xqurHCfLfCw1uP//XMyFZ8j8rQJ3UKejSN+A32I+Nop8ya1noTr8RG9l2mxMcDDW9iDPNlVlJGGfWMa7ZuWUmiJzcCuEMKgi89/5S7opJHDsks6H8nhejVKciKS8/e/PDJWaF18gpaMmSyACLYwalFkDWXngcnctMbXWNNsgpK2C5s6yoFTZUIsubS8yZd/OFHDHOQxCV0PEHWXHo2pnUll9jX4p6k4wmy7tKzqbKO79Tfd4nHNSzIhZee3UOQCy89u4egy9Uuu/TsHoICEuUop2FBKWG1MpTTsKD9Uf2Xp7tmILl7CHLhQHI3EHTyvzKV06ogkscwtW9fdbyclgVVkZOOl0NBovy4K6eFgZ/YMbv2BV2Ib6XXx3bMrn1B7Vi1idXm5giYmCaMd3hBp4PiBQS8LIyrUZA+MDCA+NGuy1uHVYJOTRC2n5ojbKtQ0BuP4VA5rQqSDRQEgIIAUBAACgJAQQAoCAAFAaAgABQEgILkuFfDuYI2h68QkPKjFV2SxjZB8tyr4VxB8d3SBQz6mxVdkkaRezV2Cv+nMYOFYZkFWTxL9AUFBdl7r0bISsH/dKa/MKwdQVL3alxuWzn6iJ50C0kQrEHPdxGuUd2HCttkkaA5Xi8M+48UNJOJMDyiq7A9QEFBUvdq3GhbOeJ+EJvvgHCvsDZW2F6yQtiemyZorokXhheuFrZjhM1VCcJ2xh071ZixSRB8r4b2sO0oBt6roT1s/Rwkeq+GJcc25NDYmkQN5yylh/+wiRrOXEUN70wBOu+gIKt4dUw8jRlB1HC813xqeOAkajhqEDU8z8bbup0iaNW71LDlB0VLLG5FsMTiacCWAF81qrrTF24JCgJAQQAoCAAFAaAgABQEgIIAnCIodSM1/HkkffbAh9Tw3Pep4f2x1HBNEH3hljhFUO0jathUTZ8d+CZz10gNN9LXP6i6JU4RpCVQEAAKAkBBACgIAAUBoCAAFASAggBQEAAKAkBBAE4QVDLWEP21aKRp81Cf8D830XKao2Oka1yY3u3Jdc1SYWPmIJ+nD9J7YDvyCyr1eCX3WYPoI2HTdMv2J+jW0nK2kxjJGv/pPmV3AkmXCr/tmVwQQz6i9sB25BcUFW1i7geL/VSiKWABO13qbZTOqfD1jZGsseA5duVLmiUV7r2QXcSombQe2IHsgm6TXew0PkwkVEm4320pIRWSOc1Rr0bESNWo9ytkmqQXYeq+hp1O+yWtB3Ygu6Dz5Aw7zeoiMpCx7hJ3Ii3Rq1YyZ1tQNSdIPH6VFD7r1ecdo9QiEnt9ereocwGtB3Ygu6AycpGd7iVS5/XyPN+QzKnQH2Y4QeLx08Tn98dSO6VKzd48gRCyHO6BbThBEPeMqnwifmaz8tfklQapnOYoVo5ZkFi8lLzJThN9jOJh08KgnPJ3/XYCPbAV2QWdI9zTSrO9RFfw4q6hh6Rz9gRcqakZO7umUTz+JX9T7VHyvXj4E3KCnW7wukvtgc04YSedx04Xh4rFSkhsHSUnqeX3rz4Uj1/nDuHMB+SmeDifVLHT4+QirQe2I/9hPnIae8DpL/az9Q0940y0nCvlLOGTy6vE46bh3N3Rc/uaxMNfkw/Y6UqvBkoP7MAJHxR1y0tnGsRGmv+DJHDP38l8SMnh90ES8UIyb18s2ScRNr3ov6FoqWcqrQd24ISvGgdH+Ud9IxbY1bIJ3aLkmAVJxAtG+z5TIhl+sPIn3uHbmmg9sAP8sgqAggBQEAAKAkBBACgIAAUBoCAAFASAggBQEAAKAkBBACgIAAUBoCAAFASAggBQEAAKAkBBACgIAAUBoCAAFASAggDUJchUPNFgGFPQLB7dEcg8IL9VtkcqE7SEPL8xaypZLR5lBT2alKFsj9QlqJykceNjksh3ouEdjj1v3z5UJei5cH7jqhqQwzD3ftfba8A7bDtk/5pul+8v6NNncTYrKCSTYZrWD/UdfVihPqlJUINHensjLiC1MIEUskqiBy67HemzPu/nhhZBizutLnqZ+71gJVCToO9IcXtjZi47GZbMKulfy2577zNMXT+zoBudtrC78ykjlOmUmgSdJ0cE7ZuFXZJYJcsZJtOP2/aSzIKO8T91nK+rV6RTahL0kGwxv8l7j7U1JajH1F6cIHa7S+IfbrrFLChXx9kqI9cU6ZSaBDFDx/GDPOv1i5l7PrHnTMzoJPNeZwu/BiWbBZXya1ABoT//Qi5UJegg2cwZWkfK2BXkOns407cIOsXtg+pDWvZBnn/i9kHhyvRJVYJMr5NfpG99ifu0XOE5Y2/2oK4jz/GCTJN81udPGNByFFvUeU3HPIqxHJgabBi9ixupWhimH3/8RHAmr4R5sKBvcMKxFkHGtUP0HfJzkCpBQQAoCAAFAaAgABQEgIIAUBAACgJAQQAoCAAFAaAgABQEgIIAUBAACgJAQQAoCAAFAaAgABQEgIIAUBAACgL4PxMP7Wuxww41AAAAAElFTkSuQmCC" /><!-- --><img src="data:image/png;base64,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" /><!-- --><img src="data:image/png;base64,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" /><!-- --><img src="data:image/png;base64,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" /><!-- --><img src="data:image/png;base64,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" /><!-- --><img src="data:image/png;base64,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" /><!-- --><img src="data:image/png;base64,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" /><!-- --></p>
+<p>It is clear that some of them tend to provide higher scores than others, and also that some of them have wider bars than others. MAI, as it has been said, is quite different.</p>
+<p>We expect that if different scores are used along samples, our understanding of the advantages and flaws of each one could improve. This way we could better measure such a difficult thing to measure as MedDiet adherence.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Scientific Support Unit, Hospital 12 de Octubre, Madrid, Spain<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Pitsavos, Christos, Demosthenes B. Panagiotakos, Natalia Tzima, Christina Chrysohoou, Manolis Economou, Antonis Zampelas, and Christodoulos Stefanadis. 2005. “Adherence to the Mediterranean Diet Is Associated with Total Antioxidant Capacity in Healthy Adults: The ATTICA Study”. The American Journal of Clinical Nutrition 82 (3): 694-99. <a href="http://ajcn.nutrition.org/content/82/3/694" class="uri">http://ajcn.nutrition.org/content/82/3/694</a><a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>Sofi, Francesco, Claudio Macchi, Rosanna Abbate, Gian Franco Gensini, and Alessandro Casini. 2014. ‘Mediterranean Diet and Health Status: An Updated Meta-Analysis and a Proposal for a Literature-Based Adherence Score’. Public Health Nutrition 17 (12): 2769-82. <a href="https://www.cambridge.org/core/journals/public-health-nutrition/article/mediterranean-diet-and-health-status-an-updated-meta-analysis-and-a-proposal-for-a-literature-based-adherence-score/FCD121A09BB103DFB55237479D5CB659" class="uri">https://www.cambridge.org/core/journals/public-health-nutrition/article/mediterranean-diet-and-health-status-an-updated-meta-analysis-and-a-proposal-for-a-literature-based-adherence-score/FCD121A09BB103DFB55237479D5CB659</a><a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>Marrugat J, Subirana I, Ramos R, Vila J, Marín-Ibañez A, Guembe MJ, et al. Derivation and validation of a set of 10-year cardiovascular risk predictive functions in Spain: the FRESCO Study. Prev Med. 2014 Apr;61:66–74.<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>Martinez-Gonzalez, M. A., E. Fernandez-Jarne, M. Serrano-Martinez, M. Wright, and E. Gomez-Gracia. 2004. ‘Development of a Short Dietary Intake Questionnaire for the Quantitative Estimation of Adherence to a Cardioprotective Mediterranean Diet’. European Journal of Clinical Nutrition 58 (11): 1550-52. <a href="http://www.nature.com/ejcn/journal/v58/n11/full/1602004a.html" class="uri">http://www.nature.com/ejcn/journal/v58/n11/full/1602004a.html</a><a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>Goulet, Julie, Benoıt Lamarche, Genevieve Nadeau, and Simone Lemieux. 2003. ‘Effect of a Nutritional Intervention Promoting the Mediterranean Food Pattern on Plasma Lipids, Lipoproteins and Body Weight in Healthy French-Canadian Women’. Atherosclerosis 170 (1): 115-24. <a href="http://europepmc.org/abstract/med/12957689" class="uri">http://europepmc.org/abstract/med/12957689</a><a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p>Alberti-Fidanza, A., F. Fidanza, M. P. Chiuchiù, G. Verducci, and D. Fruttini. 1999. “Dietary Studies on Two Rural Italian Population Groups of the Seven Countries Study. 3. Trend Of Food and Nutrient Intake from 1960 to 1991.” European Journal of Clinical Nutrition 53 (11): 854–60<a href="#fnref7">↩</a></p></li>
+<li id="fn8"><p>Martinez-Gonzalez, Miguel A., Elena Fernandez-Jarne, Manuel Serrano-Martinez, Amelia Marti, J. Alfredo Martinez, and Jose M. Martin-Moreno. 2002. ‘Mediterranean Diet and Reduction in the Risk of a First Acute Myocardial Infarction: An Operational Healthy Dietary Score’. European Journal of Nutrition 41 (4): 153-60. <a href="http://link.springer.com/article/10.1007/s00394-002-0370-6" class="uri">http://link.springer.com/article/10.1007/s00394-002-0370-6</a><a href="#fnref8">↩</a></p></li>
+<li id="fn9"><p>Scali, Jacqueline, Aurelia Richard, and Mariette Gerber. 2001. ‘Diet Profiles in a Population Sample from Mediterranean Southern France’. Public Health Nutrition 4 (02): 173-182. <a href="https://www.cambridge.org/core/journals/public-health-nutrition/article/diet-profiles-in-a-population-sample-from-mediterranean-southern-france/C224E7CA8F130EF5B2385A8143705AB0" class="uri">https://www.cambridge.org/core/journals/public-health-nutrition/article/diet-profiles-in-a-population-sample-from-mediterranean-southern-france/C224E7CA8F130EF5B2385A8143705AB0</a><a href="#fnref9">↩</a></p></li>
+<li id="fn10"><p>Trichopoulou, A., A. Kouris-Blazos, M. L. Wahlqvist, C. Gnardellis, P. Lagiou, E. Polychronopoulos, T. Vassilakou, L. Lipworth, and D. Trichopoulos. 1995. “Diet and Overall Survival in Elderly People.” BMJ (Clinical Research Ed.) 311 (7018): 1457–60<a href="#fnref10">↩</a></p></li>
+<li id="fn11"><p>Trichopoulou, Antonia, Tina Costacou, Christina Bamia, and Dimitrios Trichopoulos. 2003. “Adherence to a Mediterranean Diet and Survival in a Greek Population.” New England Journal of Medicine 348 (26): 2599–2608. <a href="http://www.nejm.org/doi/full/10.1056/NEJMoa025039" class="uri">http://www.nejm.org/doi/full/10.1056/NEJMoa025039</a><a href="#fnref11">↩</a></p></li>
+<li id="fn12"><p>Trichopoulou, Antonia, Philippos Orfanos, Teresa Norat, Bas Bueno-de-Mesquita, Marga C. Ocke, Petra HM Peeters, Yvonne T. van der Schouw, et al. 2005. “Modified Mediterranean Diet and Survival: EPIC-Elderly Prospective Cohort Study.” BMJ 330 (7498): 991. <a href="http://www.bmj.com/content/early/2004/12/31/bmj.38415.644155.8F" class="uri">http://www.bmj.com/content/early/2004/12/31/bmj.38415.644155.8F</a><a href="#fnref12">↩</a></p></li>
+<li id="fn13"><p>Sofi, Francesco, Rosanna Abbate, Gian Franco Gensini, Alessandro Casini, Antonia Trichopoulou, and Christina Bamia. 2012. ‘Identification of Change-Points in the Relationship between Food Groups in the Mediterranean Diet and Overall Mortality: An “a Posteriori” Approach’. European Journal of Nutrition 51 (2): 167–72. <a href="http://link.springer.com/article/10.1007%2Fs00394-011-0202-7">http://link.springer.com/article/10.1007%2Fs00394-011-0202-7</a><a href="#fnref13">↩</a></p></li>
+<li id="fn14"><p>Rumawas, Marcella E., Johanna T. Dwyer, Nicola M. Mckeown, James B. Meigs, Gail Rogers, and Paul F. Jacques. 2009. ‘The Development of the Mediterranean-Style Dietary Pattern Score and Its Application to the American Diet in the Framingham Offspring Cohort’. The Journal of Nutrition 139 (6): 1150-56. <a href="http://jn.nutrition.org/content/139/6/1150.long" class="uri">http://jn.nutrition.org/content/139/6/1150.long</a><a href="#fnref14">↩</a></p></li>
+<li id="fn15"><p>Pitsavos, Christos, Demosthenes B. Panagiotakos, Natalia Tzima, Christina Chrysohoou, Manolis Economou, Antonis Zampelas, and Christodoulos Stefanadis. 2005. “Adherence to the Mediterranean Diet Is Associated with Total Antioxidant Capacity in Healthy Adults: The ATTICA Study”. The American Journal of Clinical Nutrition 82 (3): 694-99. <a href="http://ajcn.nutrition.org/content/82/3/694" class="uri">http://ajcn.nutrition.org/content/82/3/694</a><a href="#fnref15">↩</a></p></li>
+<li id="fn16"><p>Mila-Villarroel, Raimon, Anna Bach-Faig, Josep Puig, Anna Puchal, Andreu Farran, Lluis Serra-Majem, and Josep Lluis Carrasco. 2011. “Comparison and Evaluation of the Reliability of Indexes of Adherence to the Mediterranean Diet.” Public Health Nutrition 14 (12A): 2338-45. <a href="https://www.cambridge.org/core/services/aop-cambridge-core/content/view/S1368980011002606" class="uri">https://www.cambridge.org/core/services/aop-cambridge-core/content/view/S1368980011002606</a><a href="#fnref16">↩</a></p></li>
+<li id="fn17"><p>D’Alessandro, Annunziata, and Giovanni De Pergola. 2015. “Mediterranean Diet and Cardiovascular Disease: A Critical Evaluation of A Priori Dietary Indexes.” Nutrients 7 (9): 7863-88. <a href="http://www.mdpi.com/2072-6643/7/9/5367" class="uri">http://www.mdpi.com/2072-6643/7/9/5367</a><a href="#fnref17">↩</a></p></li>
+<li id="fn18"><p>Waijers, Patricia M. C. M., Edith J. M. Feskens, and Marga C. Ocke. 2007. “A Critical Review of Predefined Diet Quality Scores.” British Journal of Nutrition 97 (2): 219-231. <a href="https://www.cambridge.org/core/services/aop-cambridge-core/content/view/S0007114507250421" class="uri">https://www.cambridge.org/core/services/aop-cambridge-core/content/view/S0007114507250421</a><a href="#fnref18">↩</a></p></li>
+<li id="fn19"><p>Martinez-Gonzalez, Miguel Angel, Dolores Corella, Jordi Salas-Salvado, Emilio Ros, Maria Isabel Covas, Miquel Fiol, Julia Warnberg, et al. 2012. “Cohort Profile: Design and Methods of the PREDIMED Study.” International Journal of Epidemiology 41 (2): 377-385. <a href="http://ije.oxfordjournals.org/content/41/2/377.short" class="uri">http://ije.oxfordjournals.org/content/41/2/377.short</a>.<a href="#fnref19">↩</a></p></li>
+<li id="fn20"><p>Buckland, Genevieve, Carlos A. Gonzalez, Antonio Agudo, Mireia Vilardell, Antoni Berenguer, Pilar Amiano, Eva Ardanaz, et al. 2009. ‘Adherence to the Mediterranean Diet and Risk of Coronary Heart Disease in the Spanish EPIC Cohort Study’. American Journal of Epidemiology, January, kwp282. <a href="https://academic.oup.com/aje/article-lookup/doi/10.1093/aje/kwp282" class="uri">https://academic.oup.com/aje/article-lookup/doi/10.1093/aje/kwp282</a><a href="#fnref20">↩</a></p></li>
+<li id="fn21"><p>Sofi, Francesco, Claudio Macchi, Rosanna Abbate, Gian Franco Gensini, and Alessandro Casini. 2014. ‘Mediterranean Diet and Health Status: An Updated Meta-Analysis and a Proposal for a Literature-Based Adherence Score’. Public Health Nutrition 17 (12): 2769-82. <a href="https://www.cambridge.org/core/journals/public-health-nutrition/article/mediterranean-diet-and-health-status-an-updated-meta-analysis-and-a-proposal-for-a-literature-based-adherence-score/FCD121A09BB103DFB55237479D5CB659" class="uri">https://www.cambridge.org/core/journals/public-health-nutrition/article/mediterranean-diet-and-health-status-an-updated-meta-analysis-and-a-proposal-for-a-literature-based-adherence-score/FCD121A09BB103DFB55237479D5CB659</a><a href="#fnref21">↩</a></p></li>
+<li id="fn22"><p>Milà-Villarroel R, Bach-Faig A, Puig J, Puchal A, Farran A, Serra-Majem L, et al. Comparison and evaluation of the reliability of indexes of adherence to the Mediterranean diet. Public Health Nutr. 2011 Dec;14(12A):2338–45.<a href="#fnref22">↩</a></p></li>
+<li id="fn23"><p><a href="https://en.wikipedia.org/wiki/Sofrito" class="uri">https://en.wikipedia.org/wiki/Sofrito</a><a href="#fnref23">↩</a></p></li>
+</ol>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
