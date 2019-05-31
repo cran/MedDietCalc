@@ -29,7 +29,7 @@ computeMDS12(data, Vegetables, Legumes, FruitAndNuts, Cereals, Potatoes = NULL,
   \item{Meat}{Numeric variable with Meat consumption as grams}
   \item{Alcohol}{Numeric variable with Alcohol consumption as etanol grams from any beberage origin}
   \item{OOprincipal}{Integer. This item scores wether olive oil is the main dietary fat as a dichotomous variable (1-yes, 0-no).}
-  \item{Sex}{Vector with gender, it can be numeric, factor or character, as long as its values are provided by 'men' and 'women' arguments. If 'Sex' argument is character or factor, and values for male are either 'man', 'male', 'MAN' or 'MALE', and for females are 'woman', 'female', 'WOMAN' or 'FEMALE', then, the arguments 'men' and 'women' can be missing}
+  \item{Sex}{Vector with gender, it can be numeric, factor or character, as long as its values are provided by 'men' and 'women' arguments.}
   \item{men}{A character string with the value of male gender, default is "male"}
   \item{women}{A character string with the value of female gender, default is "female"}
   \item{frequency}{A character string. Allowed values are 'daily', 'weekly' and 'monthly'. It informs about the frequency which food or nutrient consumption refers to (i.e. wether the rest of arguments are 'grams per day' or 'grams per week' or 'grams per month')}
@@ -39,7 +39,7 @@ computeMDS12(data, Vegetables, Legumes, FruitAndNuts, Cereals, Potatoes = NULL,
 
 
 \details{
-This score is an update of the widely used MDS (Mediterranean Diet Score), with some modifications, the most relevant are the following: First, it uses fixed ('a posteriori') cut-offs, instead of using sample derived medians. Second, instead of scoring all variables dichotomously (0-1), it scores from 0 (minimum) to 2 (maximum), with items which can receive 1 point.
+This score is an update of the widely used MDS (Mediterranean Diet Score), with some modifications, the most relevant are the following: First, it uses fixed ('a priori') cut-offs, instead of using sample derived medians. Second, instead of scoring all variables dichotomously (0-1), it scores from 0 (minimum) to 2 (maximum), with items which can receive 1 point.
 As another difference, it stops evaluating Mono and Poli Unsaturated fats, but instead scores Olive Oil consumption. Olive Oil is considered dichotomously.
 }
 
@@ -74,7 +74,7 @@ MedDiet <- computeMDS12(data = nutriSample,
                   P60grCom + P61grCom + P62grCom,
         Fish = P35grCom + P36grCom + P37grCom + P38grCom,
         Meat = P29grCom + P30grCom + P31grCom + P32grCom,
-        Dairy = P19grCom + P20grCom + P20grCom + P22grCom + P23grCom +
+        Dairy = P19grCom + P20grCom + P22grCom + P23grCom +
                 P24grCom + P25grCom + P26grCom + P27grCom,
         Alcohol =  12 * (P94rac + P96rac + P97rac + P98rac + P99rac),
         Potatoes =  NULL,

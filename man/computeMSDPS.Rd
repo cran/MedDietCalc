@@ -50,7 +50,7 @@ computeMSDPS(data, WholeCereals, Fruit, Vegetables, Dairy, Wine,
   \item{MeatK}{Numeric variable with energy (as Kcal) due to consumption of red meat.}
   \item{OliveOilK}{Numeric variable with energy (as Kcal) due to consumption of olive oil.}
   \item{Kcal}{Numeric with total energy intake (as Kcal).}
-  \item{Sex}{Vector with gender, it can be numeric, factor or character, as long as its values are provided by 'men' and 'women' arguments. If 'Sex' argument is character or factor, and values for male are either 'man', 'male', 'MAN' or 'MALE', and for females are 'woman', 'female', 'WOMAN' or 'FEMALE', then, the arguments 'men' and 'women' can be missing}
+  \item{Sex}{Vector with gender, it can be numeric, factor or character, as long as its values are provided by 'men' and 'women' arguments.}
   \item{men}{A character string with the value of male gender, default is "male"}
   \item{women}{A character string with the value of female gender, default is "female"}
   \item{frequency}{A character string. Allowed values are 'daily', 'weekly' and 'monthly'. It informs about the frequency which food or nutrient consumption refers to (i.e. wether the rest of arguments are 'grams per day' or 'grams per week' or 'grams per month')}

@@ -38,25 +38,8 @@ computeMSDPS <- function(data, WholeCereals, Fruit, Vegetables, Dairy, Wine,
   OOK <- eval(arguments$OliveOilK, data)
   Kcal <- eval(arguments$Kcal, data)
 
-  # This code chunk checks the 'Sex' argument to identify if it contents enough information to understand sex labels, or if it needs the 'men' and 'women' arguments
-  if((missing(men) || missing(women)) && is.numeric(Sex)) {stop("'Sex' argument is numeric, and the function knows not how to handle it, please, provide 'men' and 'women' arguments (v.gr. men=1, women=2)")}
 
-  if(missing(men) || missing(women) && (is.factor(Sex) || is.character(Sex))) {
-    if(any(levels(Sex)) %in% c("man", "male", "MAN", "Male", "MALE")) {men <- levels(Sex)[which(levels(Sex)) %in% c("man", "male", "MAN", "Male", "MALE")]
-    } else {
-      if(any(levels(Sex)) %in% c("woman", "female", "WOMAN", "Female", "FEMALE")) {women <- levels(Sex)[which(levels(Sex)) %in% c("woman", "female", "WOMAN", "Female", "FEMALE")]
-      } else {
-        if(any(names(table(Sex)) %in% c("man", "male", "MAN", "Male", "MALE"))) {men <- names(table(Sex))[which(names(table(Sex)) %in% c("man", "male", "MAN", "Male", "MALE"))]
-        } else {
-          if(any(names(table(Sex)) %in% c("woman", "female", "WOMAN", "Female", "FEMALE"))) {women <- names(table(Sex))[which(names(table(Sex)) %in% c("woman", "female", "WOMAN", "Female", "FEMALE"))]
-          } else {stop("function knows not to handle the 'Sex' argument, please, set values for men and women identification with 'men' and 'women' arguments")}
-        }
-      }
-    }
-  }
-
-
-  # this code chunk tests if data has not been introduced in a monthly fashion, and if so, transform data to montly consumption
+  # this code chunk tests if data has not been introduced in a daily fashion, and if so, transform data to daily consumption
   if(is.null(frequency)){stop("please, provide the frequency of consumption in which the data is tabulated with the 'frequency' argument. Accepted values are 'daily', 'weekly' and 'monthly'")}
 
   if(frequency == "monthly" || frequency == "weekly"){
@@ -86,7 +69,7 @@ computeMSDPS <- function(data, WholeCereals, Fruit, Vegetables, Dairy, Wine,
   Item <- function(food, Servings){
     De <- 100 * sqrt((Servings - food)^2) / Servings # Percent of deviation from the recomended amount of servings
     S <- 10 - (De / 10) # 10 is the maximun item Score, from it, deviation is sustracted (as tens)
-    S[S < 0] <- 0 # if
+    S[S < 0] <- 0 # minimun is zero
     return(S)
   }
 

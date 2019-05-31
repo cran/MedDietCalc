@@ -29,7 +29,7 @@
   \item{MUFA}{Optional if Fats is provided. Numeric variable with consumption of Mono Unsaturated Fatty Acids, units should be the same as used with PUFA and SFA}
   \item{PUFA}{Optional if Fats is provided. Numeric variable with consumption of Poli Unsaturated Fatty Acids}
   \item{SFA}{Optional if Fats is provided. Numeric variable with consumption of Saturated Fatty Acids}
-  \item{Sex}{Vector with gender, it can be numeric, factor or character, as long as its values are provided by 'men' and 'women' arguments. If 'Sex' argument is character or factor, and values for male are either 'man', 'male', 'MAN' or 'MALE', and for females are 'woman', 'female', 'WOMAN' or 'FEMALE', then, the arguments 'men' and 'women' can be missing}
+  \item{Sex}{Vector with gender, it can be numeric, factor or character, as long as its values are provided by 'men' and 'women' arguments.}
   \item{men}{A character string with the value of male gender, default is "male"}
   \item{women}{A character string with the value of female gender, default is "female"}
   \item{frequency}{A character string. Allowed values are 'daily', 'weekly' and 'monthly'. It informs about the frequency which food or nutrient consumption refers to (i.e. wether the rest of arguments are 'grams per day' or 'grams per week' or 'grams per month')}
@@ -40,8 +40,9 @@
 \details{
  This score is an update of the landmark first Mediterranean Diet Score (MDS), published in 1995, which includes fish consumption (previously introduced) and which sums MUFA + PUFA.
 
- Original 1995 paper of Trichopoulou et al. included potatoes with cereals, but later research has challenged this view. If you want to compute the score as originally developed, provide potato consumption as 'Potatoes' argument, and you will get a warning informing you that both have been used together in the score.
- If you don't want to compute potatoes consumption, don't provide 'Potatoes' argument, and you will receive a warning informing you that you are diverting from the very original score.
+ Original 1995 paper of Trichopoulou et al. included potatoes with cereals, but later research has challenged this view. If you want to compute the score as originally developed, provide potato consumption as 'Potatoes' argument, and you will get a NOTE informing you that both have been used together in the score.
+ If you don't want to compute potatoes consumption, don't provide 'Potatoes' argument, and you will receive a NOTE informing you that you are diverting from the very original score.
+
  Some score components are a combination of foods you may have as separated variables, if so, you can just add them toghether (v.gr. miFruitVariable + miNutsVariable).
 
  Score values (MUFA + PUFA) / SFA. Depending in how your data has been developed, you can provide the ratio as 'Fats' argument or the triada 'MUFA', 'PUFA' and 'SFA', but if you provide this information by both of the ways, just 'Fats' argument will be computed, and you will receive a warning asking you to check the arguments.
@@ -72,7 +73,7 @@ MedDiet <- computeMDS05(data = nutriSample,
                   P60grCom + P61grCom + P62grCom,
         Fish = P35grCom + P36grCom + P37grCom + P38grCom,
         Meat = P29grCom + P30grCom + P31grCom + P32grCom,
-        Dairy = P19grCom + P20grCom + P20grCom + P22grCom + P23grCom +
+        Dairy = P19grCom + P20grCom + P22grCom + P23grCom +
                 P24grCom + P25grCom + P26grCom + P27grCom,
         Alcohol =  12 * (P94rac + P96rac + P97rac + P98rac + P99rac),
         Potatoes =  P43grCom +  P44grCom +  P45grCom,

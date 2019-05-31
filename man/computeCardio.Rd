@@ -73,7 +73,3 @@ MedDiet <- computeCardio(data = nutriSample,
                           frequency = "daily", output = "percent", rm.na = FALSE)
 hist(MedDiet)
 }
-
-
-\keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

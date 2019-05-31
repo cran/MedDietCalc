@@ -100,74 +100,74 @@ Food consumption was assessed by a Frequency Food Questionnaire. For all foods o
     \item{\code{P42grCom}}{Edible portion (in grams) of boiled or grilled vegetables}
     \item{\code{P42Kcal}}{Kcal attributable to consumption of boiled or grilled vegetables}
     \item{\code{P42rac}}{Servings of boiled or grilled vegetables}
-    \item{\code{P43grCom}}{Edible portion (in grams) of }
-    \item{\code{P43Kcal}}{Kcal attributable to consumption of }
-    \item{\code{P43rac}}{Servings of }
-    \item{\code{P44grCom}}{Edible portion (in grams) of }
-    \item{\code{P44Kcal}}{Kcal attributable to consumption of }
-    \item{\code{P44rac}}{Servings of }
-    \item{\code{P45grCom}}{Edible portion (in grams) of }
-    \item{\code{P45rac}}{Servings of }
-    \item{\code{P45Kcal}}{Kcal attributable to consumption of }
-    \item{\code{P46grCom}}{Edible portion (in grams) of }
-    \item{\code{P46Kcal}}{Kcal attributable to consumption of }
-    \item{\code{P46rac}}{Servings of }
-    \item{\code{P50grCom}}{Edible portion (in grams) of }
-    \item{\code{P50Kcal}}{Kcal attributable to consumption of }
-    \item{\code{P50rac}}{Servings of }
-    \item{\code{P52grCom}}{Edible portion (in grams) of }
-    \item{\code{P52rac}}{Servings of }
-    \item{\code{P52Kcal}}{Kcal attributable to consumption of }
-    \item{\code{P53grCom}}{Edible portion (in grams) of }
-    \item{\code{P53Kcal}}{Kcal attributable to consumption of }
-    \item{\code{P53rac}}{Servings of }
-    \item{\code{P54Kcal}}{Kcal attributable to consumption of }
-    \item{\code{P54rac}}{Servings of }
-    \item{\code{P55grCom}}{Edible portion (in grams) of }
-    \item{\code{P55Kcal}}{Kcal attributable to consumption of }
-    \item{\code{P55rac}}{Servings of }
-    \item{\code{P56grCom}}{Edible portion (in grams) of }
-    \item{\code{P56Kcal}}{Kcal attributable to consumption of }
-    \item{\code{P56rac}}{Servings of }
-    \item{\code{P57grCom}}{Edible portion (in grams) of }
-    \item{\code{P57Kcal}}{Kcal attributable to consumption of }
-    \item{\code{P57rac}}{Servings of }
-    \item{\code{P59grCom}}{Edible portion (in grams) of }
-    \item{\code{P59Kcal}}{Kcal attributable to consumption of }
-    \item{\code{P59rac}}{Servings of }
-    \item{\code{P60grCom}}{Edible portion (in grams) of }
-    \item{\code{P60Kcal}}{Kcal attributable to consumption of }
-    \item{\code{P60rac}}{Servings of }
-    \item{\code{P61grCom}}{Edible portion (in grams) of }
-    \item{\code{P61Kcal}}{Kcal attributable to consumption of }
-    \item{\code{P61rac}}{Servings of }
-    \item{\code{P62grCom}}{Edible portion (in grams) of }
-    \item{\code{P62Kcal}}{Kcal attributable to consumption of }
-    \item{\code{P62rac}}{Servings of }
+    \item{\code{P43grCom}}{Edible portion (in grams) of boiled or roasted potatoes}
+    \item{\code{P43Kcal}}{Kcal attributable to consumption of boiled or roasted potatoes}
+    \item{\code{P43rac}}{Servings of boiled or roasted potatoes}
+    \item{\code{P44grCom}}{Edible portion (in grams) of fried home cooked potatoes (not frozen)}
+    \item{\code{P44Kcal}}{Kcal attributable to consumption of fried home cooked potatoes (not frozen)}
+    \item{\code{P44rac}}{Servings of fried home cooked potatoes (not frozen)}
+    \item{\code{P45grCom}}{Edible portion (in grams) of fried frozen potatoes or eaten in restaurants or fast food}
+    \item{\code{P45rac}}{Servings of fried frozen potatoes or eaten in restaurants or fast food}
+    \item{\code{P45Kcal}}{Kcal attributable to consumption of fried frozen potatoes or eaten in restaurants or fast food}
+    \item{\code{P46grCom}}{Edible portion (in grams) of legumes}
+    \item{\code{P46Kcal}}{Kcal attributable to consumption of legumes}
+    \item{\code{P46rac}}{Servings of legumes}
+    \item{\code{P50grCom}}{Edible portion (in grams) of fresh fruit}
+    \item{\code{P50Kcal}}{Kcal attributable to consumption of fresh fruit}
+    \item{\code{P50rac}}{Servings of fresh fruit}
+    \item{\code{P52grCom}}{Edible portion (in grams) of dried figs, dried grapes, dried plums or dates}
+    \item{\code{P52rac}}{Servings of dried figs, dried grapes, dried plums or dates}
+    \item{\code{P52Kcal}}{Kcal attributable to consumption of dried figs, dried grapes, dried plums or dates}
+    \item{\code{P53grCom}}{Edible portion (in grams) of nuts (almonds, pistachios, walnuts, hazelnuts or peanuts)}
+    \item{\code{P53Kcal}}{Kcal attributable to consumption of nuts (almonds, pistachios, walnuts, hazelnuts or peanuts)}
+    \item{\code{P53rac}}{Servings of nuts (almonds, pistachios, walnuts, hazelnuts or peanuts)}
+    \item{\code{P54Kcal}}{Kcal attributable to consumption of olives}
+    \item{\code{P54rac}}{Servings of olives}
+    \item{\code{P55grCom}}{Edible portion (in grams) of white bread}
+    \item{\code{P55Kcal}}{Kcal attributable to consumption of white bread}
+    \item{\code{P55rac}}{Servings of white bread}
+    \item{\code{P56grCom}}{Edible portion (in grams) of whole grain bread}
+    \item{\code{P56Kcal}}{Kcal attributable to consumption of whole grain bread}
+    \item{\code{P56rac}}{Servings of whole grain bread}
+    \item{\code{P57grCom}}{Edible portion (in grams) of toast bread}
+    \item{\code{P57Kcal}}{Kcal attributable to consumption of toast bread}
+    \item{\code{P57rac}}{Servings of toast bread}
+    \item{\code{P59grCom}}{Edible portion (in grams) of breakfast cereals}
+    \item{\code{P59Kcal}}{Kcal attributable to consumption of breakfast cereals}
+    \item{\code{P59rac}}{Servings of breakfast cereals}
+    \item{\code{P60grCom}}{Edible portion (in grams) of fiber enriched breakfast cereals}
+    \item{\code{P60Kcal}}{Kcal attributable to consumption of fiber enriched breakfast cereals}
+    \item{\code{P60rac}}{Servings of fiber enriched breakfast cereals}
+    \item{\code{P61grCom}}{Edible portion (in grams) of white rice}
+    \item{\code{P61Kcal}}{Kcal attributable to consumption of white rice}
+    \item{\code{P61rac}}{Servings of white rice}
+    \item{\code{P62grCom}}{Edible portion (in grams) of paella (a traditionl Spanish dish based on rice with yellow colorant)}
+    \item{\code{P62Kcal}}{Kcal attributable to consumption of paella (a traditionl Spanish dish based on rice with yellow colorant)}
+    \item{\code{P62rac}}{Servings of paella (a traditionl Spanish dish based on rice with yellow colorant)}
     \item{\code{P63_2}}{A question about consumption of whole bread (1) or white bread (0)}
-    \item{\code{P69Kcal}}{Kcal attributable to consumption of }
-    \item{\code{P69rac}}{Servings of }
-    \item{\code{P70Kcal}}{Kcal attributable to consumption of }
-    \item{\code{P70rac}}{Servings of }
-    \item{\code{P71Kcal}}{Kcal attributable to consumption of }
-    \item{\code{P71rac}}{Servings of }
-    \item{\code{P72Kcal}}{Kcal attributable to consumption of }
-    \item{\code{P72rac}}{Servings of }
-    \item{\code{P73Kcal}}{Kcal attributable to consumption of }
-    \item{\code{P73rac}}{Servings of }
-    \item{\code{P75rac}}{Servings of }
-    \item{\code{P79rac}}{Servings of }
-    \item{\code{P84Kcal}}{Kcal attributable to consumption of }
-    \item{\code{P89Kcal}}{Kcal attributable to consumption of }
-    \item{\code{P89rac}}{Servings of }
-    \item{\code{P90Kcal}}{Kcal attributable to consumption of }
-    \item{\code{P90rac}}{Servings of }
-    \item{\code{P94rac}}{Servings of }
-    \item{\code{P96Kcal}}{Kcal attributable to consumption of }
-    \item{\code{P96rac}}{Servings of }
-    \item{\code{P97rac}}{Servings of }
-    \item{\code{P98rac}}{Servings of }
-    \item{\code{P99rac}}{Servings of }
+    \item{\code{P69Kcal}}{Kcal attributable to consumption of pastries}
+    \item{\code{P69rac}}{Servings of pastries}
+    \item{\code{P70Kcal}}{Kcal attributable to consumption of churros and fritters}
+    \item{\code{P70rac}}{Servings of churros and fritters}
+    \item{\code{P71Kcal}}{Kcal attributable to consumption of cakes}
+    \item{\code{P71rac}}{Servings of cakes}
+    \item{\code{P72Kcal}}{Kcal attributable to consumption of chocolate or bonbons}
+    \item{\code{P72rac}}{Servings of chocolate or bonbons}
+    \item{\code{P73Kcal}}{Kcal attributable to consumption of ice cream}
+    \item{\code{P73rac}}{Servings of ice cream}
+    \item{\code{P75rac}}{Servings of sunflower seeds}
+    \item{\code{P79rac}}{Servings of butter}
+    \item{\code{P84Kcal}}{Kcal attributable to consumption of sugar}
+    \item{\code{P89Kcal}}{Kcal attributable to consumption of soft drinks}
+    \item{\code{P89rac}}{Servings of soft drinks}
+    \item{\code{P90Kcal}}{Kcal attributable to consumption of diet soft drinks}
+    \item{\code{P90rac}}{Servings of diet soft drinks}
+    \item{\code{P94rac}}{Servings of beer}
+    \item{\code{P96Kcal}}{Kcal attributable to consumption of wine}
+    \item{\code{P96rac}}{Servings of wine}
+    \item{\code{P97rac}}{Servings of vermouth, fine wine or sweet wine}
+    \item{\code{P98rac}}{Servings of liquor or anisette}
+    \item{\code{P99rac}}{Servings of spirits (whiskey, cognac, gin)}
     \item{\code{Aceitegr}}{olive oil consumption in grams}
     \item{\code{AceiteKcal}}{Kcal attributable to olive oil consumption}
     \item{\code{AceiteTipo}}{kind of oil preferred by the surveyed person (1 = olive oil, 2 = seeds oil, 3 = both)}

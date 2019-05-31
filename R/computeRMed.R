@@ -1,6 +1,6 @@
 computeRMED <- function (data, FruitAndNuts, Vegetables, Legumes, Cereals, Fish,
                          OliveOil, OOmeasure = "gr", Meat, Dairy, Alcohol,
-                         Kcal, Sex, men="male", women="female",
+                         Kcal, Sex, men = "male", women = "female",
                          frequency = NULL, output = "percent", rm.na = FALSE) {
 
 arguments <- as.list( match.call() )
@@ -58,52 +58,52 @@ tertile2 <- function(x) {stats::quantile(x, probs=0.6666, na.rm=T)}
 
 
 FN <- 1000*FruitAndNuts/Kcal
-  FNscore <- numeric()
+  FNscore <- rep(NA, length = nrow(data))
   FNscore[FN < tertile1(FN)] <- 0
   FNscore[FN >= tertile1(FN) & FN < tertile2(FN)  ] <- 1
   FNscore[FN >= tertile2(FN)] <- 2
 
 
 V <- 1000*Vegetables/Kcal
-  Vscore <- numeric()
+  Vscore <- rep(NA, length = nrow(data))
   Vscore[V < tertile1(V)] <- 0
   Vscore[V >= tertile1(V) & V < tertile2(V)] <- 1
   Vscore[V >= tertile2(V)] <- 2
 
 L <- 1000*Legumes/Kcal
-  Lscore <- numeric()
+  Lscore <- rep(NA, length = nrow(data))
   Lscore[L < tertile1(L)] <- 0
   Lscore[L >= tertile1(L) & L < tertile2(L)] <- 1
   Lscore[L >= tertile2(L)] <- 2
 
 Ce <- 1000*Cereals/Kcal
-  Cescore <- numeric()
+  Cescore <- rep(NA, length = nrow(data))
   Cescore[Ce < tertile1(Ce)] <- 0
   Cescore[Ce >= tertile1(Ce) & Ce < tertile2(Ce)] <- 1
   Cescore[Ce >= tertile2(Ce)] <- 2
 
 Fi <- 1000*Fish/Kcal
-  Fscore <- numeric()
+  Fscore <- rep(NA, length = nrow(data))
   Fscore[Fi < tertile1(Fi)] <- 0
   Fscore[Fi >= tertile1(Fi) & Fi < tertile2(Fi)] <- 1
   Fscore[Fi >= tertile2(Fi)] <- 2
 
 OO <- 1000*OliveOil/Kcal
-  Oscore <- numeric()
+  Oscore <- rep(NA, length = nrow(data))
   Oscore[OO < tertile1(OO)] <- 0
   Oscore[OO >= tertile1(OO) & OO < tertile2(OO)] <- 1
   Oscore[OO >= tertile2(OO)] <- 2
 
 # please, note inverse scoring of meat and dairy
 M <- 1000*Meat/Kcal
-  Mscore <- numeric()
+  Mscore <- rep(NA, length = nrow(data))
   Mscore[M < tertile1(M)] <- 2
   Mscore[M >= tertile1(M) & M < tertile2(M)] <- 1
   Mscore[M >= tertile2(M)] <- 0
 
 
 Da <- 1000*Dairy/Kcal
-  Dscore <- numeric()
+  Dscore <- rep(NA, length = nrow(data))
   Dscore[Da < tertile1(Da)] <- 2
   Dscore[Da >= tertile1(Da) & Da < tertile2(Da)] <- 1
   Dscore[Da >= tertile2(Da)] <- 0
@@ -113,15 +113,17 @@ Da <- 1000*Dairy/Kcal
   #Alscore[Alcohol >= 10 & Alcohol <= 50] <- 2
   #Alscore[Alcohol < 10 | Alcohol > 50] <- 0
 # for women:
-  #Alscore[Alcohol >= 5 & Alcohol < 25] <- 2
+  #Alscore[Alcohol >= 5 & Alcohol <= 25] <- 2
   #Alscore[Alcohol < 5 | Alcohol > 25] <- 0
 
-  Alscore <- numeric(length = nrow(data))
-  Alscore[ifelse(Sex == men, Alcohol >= 10 & Alcohol <= 50, Alcohol >= 5 & Alcohol < 25)] <- 2
-  Alscore[ifelse(Sex == men , Alcohol < 10 | Alcohol > 50, Alcohol < 5 | Alcohol > 25)] <- 0
-  Alscore[Sex != men & Sex != women] <- NA
+  Ascore <- rep(NA, length = nrow(data))
+  Ascore[Sex == men & (Alcohol < 10 | Alcohol > 50)] <- 0
+  Ascore[Sex == men & Alcohol >= 10 & Alcohol <= 50] <- 2
+  Ascore[Sex == women & (Alcohol < 5 | Alcohol > 25)] <- 0
+  Ascore[Sex == women & (Alcohol >= 5 & Alcohol <= 25)] <- 2
 
-score <- data.frame(FNscore, Vscore, Lscore, Cescore, Fscore, Oscore, Mscore, Dscore, Alscore)
+
+score <- data.frame(FNscore, Vscore, Lscore, Cescore, Fscore, Oscore, Mscore, Dscore, Ascore)
   score$absolute <- apply(score, 1, function(x) sum(x, na.rm = rm.na))
   score$percent <- round(100 * score$absolute/18, 1)
 

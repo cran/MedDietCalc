@@ -69,7 +69,7 @@ MDS05 <- computeMDS05(data = nutriSample,
           P60grCom + P61grCom + P62grCom,
         Fish = P35grCom + P36grCom + P37grCom + P38grCom,
         Meat = P29grCom + P30grCom + P31grCom + P32grCom,
-        Dairy = P19grCom + P20grCom + P20grCom + P22grCom + P23grCom + 
+        Dairy = P19grCom + P20grCom + P22grCom + P23grCom + 
           P24grCom + P25grCom + P26grCom + P27grCom,
         Alcohol =  12 * (P94rac + P96rac + P97rac + P98rac + P99rac),
         Potatoes =  NULL, 
@@ -99,7 +99,7 @@ MDS12 <-
                  P60grCom + P61grCom + P62grCom,
                Fish = P35grCom + P36grCom + P37grCom + P38grCom,
                Meat = P29grCom + P30grCom + P31grCom + P32grCom,
-               Dairy = P19grCom + P20grCom + P20grCom + P22grCom + P23grCom + 
+               Dairy = P19grCom + P20grCom + P22grCom + P23grCom + 
                  P24grCom + P25grCom + P26grCom + P27grCom,
                Alcohol =  12 * (P94rac + P96rac + P97rac + P98rac + P99rac),
                Potatoes =  NULL,
@@ -150,7 +150,7 @@ MAI <- computeMAI99(data = nutriSample,
   Legumes = P46Kcal,
   Potatoes = P43Kcal + P44Kcal + P46Kcal,
   Vegetables = P41Kcal + P42Kcal,
-  FruitAndNuts = P50Kcal + P53Kcal + P53Kcal,
+  FruitAndNuts = P50Kcal + P52Kcal + P53Kcal,
   Fish = P35Kcal + P36Kcal + P37Kcal + P38Kcal,
   Wine = P96Kcal,
   Oil = AceiteKcal,
@@ -213,7 +213,7 @@ MDP02 <- computeMDP02(data = nutriSample,
 ## ------------------------------------------------------------------------
 RMed <- computeRMED(data = nutriSample,
                       Kcal = totalKcal,
-                      FruitAndNuts = P50grCom + P52grCom,
+                      FruitAndNuts = P50grCom + P52grCom + P53grCom,
                       Vegetables = P41grCom + P42grCom,
                       Legumes = P46grCom,
                       Cereals = P55grCom + P56grCom + P57grCom + P59grCom + 
@@ -221,7 +221,7 @@ RMed <- computeRMED(data = nutriSample,
                       Fish = P35grCom + P36grCom + P37grCom + P38grCom,
                       OliveOil = Aceitegr,
                       Meat = P29grCom + P30grCom + P31grCom + P32grCom,
-                      Dairy= P19grCom + P20grCom + P20grCom + P22grCom + P23grCom + 
+                      Dairy= P19grCom + P20grCom + P22grCom + P23grCom + 
                         P24grCom + P25grCom + P26grCom + P27grCom,
                       Alcohol = 12 * (P94rac + P96rac + P97rac + P98rac + P99rac),
                       Sex = SEXO, men = "Hombre", women = "Mujer",
